@@ -1,0 +1,7 @@
+wheel # 用于依赖安装？
+cnocr # 文字识别
+cnstd # 文字定位
+opencv-python # 图像识别
+ruamel.yaml # yaml解析
+pure-python-adb # adb操作
+dpath # yaml-dict xpath访问
