@@ -186,8 +186,8 @@ def handle_close_button():
     img = ADB.screencap_mat(force=True, std_size=True)
     img_gray = imgops.mat_bgr2gray(img)
     img_gray = imgops.mat_pick_grey(img_gray, 89, 3)
-    cv2.imwrite("temp.png", img_gray)
-    plt.imshow(img_gray)
+    # cv2.imwrite("temp.png", img_gray)
+    # plt.imshow(img_gray)
 
     img_template = res.get_img_gray(template_shortpath)
     img_mask = res.get_img_gray(mask_shortpath)
@@ -347,7 +347,7 @@ def nav_resource_choose_category(stage: str):
 
 
 def nav_get_stagemap_and_choose_stage_ocr(stage):
-    stage_is_main_chapter(stage)
+    pass
 
 
 def goto_stage(stage: str):
