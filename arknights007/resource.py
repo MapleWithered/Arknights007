@@ -10,7 +10,7 @@ from arknights007 import adb
 
 @functools.lru_cache()
 def load_yaml(path: str):
-    assert os.path.exists(path), '未能检测到刷图计划文件.'
+    assert os.path.exists(path), '未能检测到yaml文件.'
     with open(path, 'r', encoding='utf-8') as f:
         plan = yaml.load(f.read(), Loader=yaml.RoundTripLoader)
     return plan

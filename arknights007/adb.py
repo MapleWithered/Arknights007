@@ -10,6 +10,8 @@ import numpy as np
 import ppadb.device
 from ppadb.client import Client
 
+import arknights007.imgreco.imgops as imgops
+
 Size = namedtuple("Size", ['width', 'height'])
 Pos = namedtuple("Pos", ['x', 'y'])
 Rect = namedtuple("Rect", ['x1', 'y1', 'x2', 'y2'])
@@ -100,11 +102,13 @@ class ADB:
             return cls._prev_screenshot_raw
 
     @classmethod
-    def screencap_mat(cls, force: bool = False) -> np.array:
+    def screencap_mat(cls, force: bool = False, std_size: bool = False) -> np.array:
         if cls._device is None:
             cls.connect()
         img_np = np.frombuffer(cls.screencap_raw(force), dtype=np.uint8)
         img = cv2.imdecode(img_np, cv2.IMREAD_COLOR)
+        if std_size:
+            img = imgops.mat_size_real_to_std(img)
         return img
 
     @classmethod
@@ -141,10 +145,10 @@ class ADB:
         return cls._device.input_tap(x, y)
 
     @classmethod
-    def input_swipe(cls, start_x, start_y, end_x, end_y, duration):
+    def input_swipe(cls, start_x, start_y, end_x, end_y, duration_ms):
         if cls._device is None:
             cls.connect()
-        return cls._device.input_swipe(start_x, start_y, end_x, end_y, duration)
+        return cls._device.input_swipe(start_x, start_y, end_x, end_y, duration_ms)
 
     @classmethod
     def input_press_pos(cls, pos: Pos):
@@ -153,6 +157,10 @@ class ADB:
     @classmethod
     def input_press_rect(cls, rect: Rect):
         cls.input_tap(int((rect.x1 + rect.x2) / 2), int((rect.y1 + rect.y2) / 2))
+
+    @classmethod
+    def input_swipe_pos(cls, pos1: Pos, pos2: Pos, duration: int):
+        cls.input_swipe(int(pos1.x), int(pos1.y), int(pos2.x), int(pos2.y), duration)
 
     @classmethod
     def input_roll(cls, dx, dy):

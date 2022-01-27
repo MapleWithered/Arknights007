@@ -2,6 +2,8 @@ from collections import namedtuple
 import cv2
 import numpy as np
 
+from arknights007.adb import ADB
+
 Size = namedtuple("Size", ['width', 'height'])
 Pos = namedtuple("Pos", ['x', 'y'])
 Rect = namedtuple("Rect", ['x1', 'y1', 'x2', 'y2'])
@@ -10,6 +12,26 @@ Color = namedtuple("Color", ['r', 'g', 'b'])
 
 def mat_crop(mat, rect: Rect):
     return mat[int(rect.y1):int(rect.y2), int(rect.x1):int(rect.x2)].copy()
+
+
+def mat_size_real_to_std(mat):
+    size = ADB.get_resolution()
+    scale_ratio = 1080 / size.height
+    width = int(mat.shape[1] * scale_ratio)
+    height = int(mat.shape[0] * scale_ratio)
+    dim = (width, height)
+    resized_mat = cv2.resize(mat, dim, cv2.INTER_LINEAR)
+    return resized_mat
+
+
+def mat_size_std_to_real(mat): # same to mat_size_real_to_std
+    size = ADB.get_resolution()
+    scale_ratio = size.height / 1080
+    width = int(mat.shape[1] * scale_ratio / 100)
+    height = int(mat.shape[0] * scale_ratio / 100)
+    dim = (width, height)
+    resized_mat = cv2.resize(mat, dim, cv2.INTER_LINEAR)
+    return resized_mat
 
 
 def from_percent_pos(res: Size, pos: Pos) -> Pos:
@@ -24,8 +46,8 @@ def from_percent_rect(res: Size, rect: Rect) -> Rect:
                 int(rect.y2 / 100 * res.height))
 
 
-def from_std_pos(res: Size, pos: Pos) -> Rect:
-    return Rect(int(pos.x / 1080 * res.height),
+def from_std_pos(res: Size, pos: Pos) -> Pos:
+    return Pos(int(pos.x / 1080 * res.height),
                 int(pos.y / 1080 * res.height))
 
 

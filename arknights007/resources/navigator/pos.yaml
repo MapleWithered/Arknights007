@@ -26,9 +26,17 @@
     nav_main: [ 97, 228, 175, 451 ]
     nav_terminal: [ 751, 74, 832, 320 ]
   main_story:
-    chap_this: [ 96, 352 ]
-    chap_up: [ 96, 200 ]
-    chap_down: [ 96, 823 ]
-    episode_this: [ 1424, 528 ]
-    episode_left: [ 930, 560 ]
-    episode_right: [ 1815, 570 ]
+    act_now: [ 96, 352 ]
+    act_up: [ 96, 200 ]
+    act_down: [ 96, 823 ]
+    episode_now: [ 1425, 528 ]
+    episode_left: [ 932, 558 ]
+    episode_right: [ 1910, 560 ]
+    ocr_episode_id: [ 497,435,531,467 ]
+  reward_scene:
+    reco_template: [ 878, 55, 1058, 261 ]
+    tick_button: [ 915, 915, 1000, 1000 ]
+  resources:
+    swipe_right: [ 1496, 540 ]
+    swipe_left: [ 425, 540 ]
+    swipe_middle: [ 960, 540 ]
