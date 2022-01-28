@@ -1,5 +1,8 @@
 from collections import namedtuple
+
+import PIL.Image
 import cv2
+import numpy
 import numpy as np
 
 from arknights007.adb import ADB
@@ -8,6 +11,12 @@ Size = namedtuple("Size", ['width', 'height'])
 Pos = namedtuple("Pos", ['x', 'y'])
 Rect = namedtuple("Rect", ['x1', 'y1', 'x2', 'y2'])
 Color = namedtuple("Color", ['r', 'g', 'b'])
+
+
+def pil_to_mat(pil_img: PIL.Image.Image):
+    mat = numpy.array(pil_img).copy()
+    # mat = mat[:, :, ::-1].copy()
+    return mat
 
 
 def mat_crop(mat, rect: Rect):
@@ -24,7 +33,7 @@ def mat_size_real_to_std(mat):
     return resized_mat
 
 
-def mat_size_std_to_real(mat): # same to mat_size_real_to_std
+def mat_size_std_to_real(mat):  # same to mat_size_real_to_std
     size = ADB.get_resolution()
     scale_ratio = size.height / 1080
     width = int(mat.shape[1] * scale_ratio / 100)
@@ -48,7 +57,7 @@ def from_percent_rect(res: Size, rect: Rect) -> Rect:
 
 def from_std_pos(res: Size, pos: Pos) -> Pos:
     return Pos(int(pos.x / 1080 * res.height),
-                int(pos.y / 1080 * res.height))
+               int(pos.y / 1080 * res.height))
 
 
 def from_std_rect(res: Size, rect: Rect) -> Rect:

@@ -79,8 +79,32 @@ def match_template_best(img, template, method=cv2.TM_SQDIFF_NORMED, show_result=
     return RectResult(Rect(top_left[0], top_left[1], bottom_right[0], bottom_right[1]), val)
 
 
-def match_template_all(img, template, val, method=cv2.TM_SQDIFF_NORMED, show_result=False):
-    pass
+def match_template_all(img_gray, template, mask=None, method=cv2.TM_CCOEFF_NORMED, score_threshold=0.82,
+                       show_result=False):
+    w, h = template.shape[::-1]
+    res = cv2.matchTemplate(img_gray, template, method=method, mask=mask)
+    if show_result:
+        plt.imshow(res)
+        plt.show()
+    if method in [cv2.TM_SQDIFF, cv2.TM_SQDIFF_NORMED]:
+        loc = np.where(res <= score_threshold)
+    else:
+        loc = np.where(res >= score_threshold)
+    img_temp = img_gray.copy()
+    img_temp = cv2.cvtColor(img_temp, cv2.COLOR_GRAY2BGR)
+    result_list: list[RectResult] = []
+    rectangle_list: list = []
+    for pt in zip(*loc[::-1]):
+        rectangle_list.append([pt[0], pt[1], pt[0]+w, pt[1]+h])
+    result = cv2.groupRectangles(rectangle_list, 1)
+    for rect in result[0]:
+        if show_result:
+            cv2.rectangle(img_temp, (rect[0], rect[1]), (rect[2], rect[3]), (255, 0, 0), 5)
+        result_list.append(RectResult(Rect(*list(rect)), res[rect[1], rect[0]]))
+    if show_result:
+        plt.imshow(img_temp)
+        plt.show()
+    return result_list
 
 
 def compare_mat(img1, img2):

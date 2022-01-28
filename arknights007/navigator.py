@@ -1,7 +1,9 @@
 import os
 import time
+import typing
 from collections import namedtuple
 
+from cnocr import CnOcr
 from matplotlib import pyplot as plt
 
 from adb import ADB
@@ -15,6 +17,12 @@ Size = namedtuple("Size", ['width', 'height'])
 Pos = namedtuple("Pos", ['x', 'y'])
 Rect = namedtuple("Rect", ['x1', 'y1', 'x2', 'y2'])
 Color = namedtuple("Color", ['r', 'g', 'b'])
+
+StageInfo = namedtuple("StageInfo", ['info', 'stage_map'])
+RectResult = namedtuple("RectResult", ['rect', 'val'])
+
+OCRSingleResult = namedtuple("OCRSingleResult", ['str', 'val'])
+OCRSTDSingleResult = namedtuple("OCRSTDSingleResult", ['str', 'rect', 'val'])
 
 
 def press_std_pos(path):
@@ -37,8 +45,7 @@ def swipe_std_pos(path_start, path_end, duration_ms):
 
 def is_main_menu():
     template_shortpath = "/main_menu/gear.png"
-    img = ADB.screencap_mat(True)
-    img_gray = imgops.mat_bgr2gray(img)
+    img_gray = ADB.screencap_mat(gray=True)
     pos_rect = res.get_pos("/main_menu/gear")
     cropped = imgops.mat_crop(img_gray, imgops.from_std_rect(ADB.get_resolution(), Rect(*pos_rect)))
     cropped = imgops.mat_pick_grey(cropped, 255)
@@ -53,11 +60,24 @@ def is_main_menu():
 
 def is_terminal():
     template_shortpath = "/terminal/terminal_template.png"
-    img = ADB.screencap_mat(True)
-    img_gray = imgops.mat_bgr2gray(img)
+    img_gray = ADB.screencap_mat(gray=True)
     pos_rect = res.get_pos("/terminal/terminal_template")
     cropped = imgops.mat_crop(img_gray, imgops.from_std_rect(ADB.get_resolution(), Rect(*pos_rect)))
     cropped = imgops.mat_pick_grey(cropped, 235, 20)
+    if not os.path.exists(res.get_img_path(template_shortpath)):
+        cv2.imwrite(res.get_img_path(template_shortpath), cropped)
+    terminal_template = res.get_img_gray(template_shortpath)
+    if template.compare_mat(cropped, terminal_template) > 0.9:
+        return True
+    else:
+        return False
+
+
+def is_battle_start_button_visible():
+    template_shortpath = "/battle/start_button.png"
+    img_gray = ADB.screencap_mat(gray=True)
+    pos_rect = res.get_pos("/battle/start_button")
+    cropped = imgops.mat_crop(img_gray, imgops.from_std_rect(ADB.get_resolution(), Rect(*pos_rect)))
     if not os.path.exists(res.get_img_path(template_shortpath)):
         cv2.imwrite(res.get_img_path(template_shortpath), cropped)
     terminal_template = res.get_img_gray(template_shortpath)
@@ -346,8 +366,50 @@ def nav_resource_choose_category(stage: str):
         return False
 
 
-def nav_get_stagemap_and_choose_stage_ocr(stage):
-    pass
+def nav_get_stagemap_and_choose_stage_ocr(stage: str):
+    ocr_dict = "0123456789-ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    cn_ocr = CnOcr(cand_alphabet=ocr_dict)
+    stage_map = res.get_stage_map_local(stage)
+    if stage_map is None:
+        stage_info = res.get_stage_info_full(stage)
+        stage_map = stage_info.stage_map
+    target_index = stage_map.index(stage)
+    ocrstd_result = []
+    error_count = 0
+    while ocr.extract_result(stage, ocrstd_result) is None:
+        ocrstd_result = ocr.ocr_all_stage_tag_and_std_position(stage_map, debug_show=False, cn_ocr_object=cn_ocr)
+        visible_stage_index: list[int] = []
+        for single_result in ocrstd_result:
+            visible_stage_index.append(stage_map.index(single_result.str))
+        if len(visible_stage_index) > 0:
+            if target_index > max(visible_stage_index):
+                ADB.input_swipe_pos(imgops.from_std_pos(ADB.get_resolution(), Pos(960, 540)),
+                                    imgops.from_std_pos(ADB.get_resolution(), Pos(540, 540)),
+                                    500)
+                time.sleep(0.5)
+            elif target_index < min(visible_stage_index):
+                ADB.input_swipe_pos(imgops.from_std_pos(ADB.get_resolution(), Pos(960, 540)),
+                                    imgops.from_std_pos(ADB.get_resolution(), Pos(1380, 540)),
+                                    500)
+                time.sleep(0.5)
+            else:
+                target_result = ocr.extract_result(stage, ocrstd_result)
+                if target_result is not None:
+                    ADB.input_press_rect(target_result.rect)
+                    time.sleep(0.6)
+                    assert is_battle_start_button_visible()
+                else:
+                    ADB.input_swipe_pos(imgops.from_std_pos(ADB.get_resolution(), Pos(960, 540)),
+                                        imgops.from_std_pos(ADB.get_resolution(),
+                                                            Pos(960 + 64 * (-1) ** error_count, 540)),
+                                        500)
+                    error_count += 1
+                    time.sleep(2)
+        else:
+            error_count += 1
+            time.sleep(2)
+        if error_count > 5:
+            raise RuntimeError("ocr找不到关卡")
 
 
 def goto_stage(stage: str):
@@ -361,9 +423,10 @@ def goto_stage(stage: str):
             raise RuntimeError("日替资源关卡未开放")
     else:
         raise RuntimeError("TODO: 操作录制")
+    time.sleep(0.5)
     nav_get_stagemap_and_choose_stage_ocr(stage)
 
 
 if __name__ == '__main__':
     ADB.connect()
-    print(goto_stage('PR-B-2'))
+    pass

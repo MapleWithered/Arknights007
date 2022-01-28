@@ -5,9 +5,11 @@ import time
 from collections import namedtuple
 from pathlib import Path
 
+import PIL
 import cv2
 import numpy as np
 import ppadb.device
+from PIL import Image
 from ppadb.client import Client
 
 import arknights007.imgreco.imgops as imgops
@@ -91,7 +93,7 @@ class ADB:
 
     @classmethod
     def screencap_raw(cls, force: bool = False) -> str:
-        screenshot_ttl = 0.3
+        screenshot_ttl = 0.2
         if cls._device is None:
             cls.connect()
         if time.monotonic() - cls._prev_screenshot_timestamp > screenshot_ttl or force:
@@ -102,21 +104,23 @@ class ADB:
             return cls._prev_screenshot_raw
 
     @classmethod
-    def screencap_mat(cls, force: bool = False, std_size: bool = False) -> np.array:
+    def screencap_mat(cls, force: bool = False, std_size: bool = False, gray=False) -> np.array:
         if cls._device is None:
             cls.connect()
         img_np = np.frombuffer(cls.screencap_raw(force), dtype=np.uint8)
         img = cv2.imdecode(img_np, cv2.IMREAD_COLOR)
         if std_size:
             img = imgops.mat_size_real_to_std(img)
+        if gray:
+            img = imgops.mat_bgr2gray(img)
         return img
 
     @classmethod
-    def screencap_pil(cls):
+    def screencap_pil(cls, force: bool = False, std_size: bool = False) -> PIL.Image.Image:
         if cls._device is None:
             cls.connect()
-        # TODO
-        pass
+        img = Image.fromarray(cls.screencap_mat(force=force, std_size=std_size))
+        return img
 
     @classmethod
     def get_top_activity(cls):
@@ -159,8 +163,8 @@ class ADB:
         cls.input_tap(int((rect.x1 + rect.x2) / 2), int((rect.y1 + rect.y2) / 2))
 
     @classmethod
-    def input_swipe_pos(cls, pos1: Pos, pos2: Pos, duration: int):
-        cls.input_swipe(int(pos1.x), int(pos1.y), int(pos2.x), int(pos2.y), duration)
+    def input_swipe_pos(cls, pos1: Pos, pos2: Pos, duration_ms: int):
+        cls.input_swipe(int(pos1.x), int(pos1.y), int(pos2.x), int(pos2.y), duration_ms)
 
     @classmethod
     def input_roll(cls, dx, dy):

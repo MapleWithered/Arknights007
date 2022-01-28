@@ -40,3 +40,5 @@
     swipe_right: [ 1496, 540 ]
     swipe_left: [ 425, 540 ]
     swipe_middle: [ 960, 540 ]
+  battle:
+    start_button: [1655, 945, 1856, 1008]
