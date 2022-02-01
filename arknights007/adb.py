@@ -179,3 +179,8 @@ class ADB:
         # TODO
         # Restart arknights when crashed
         pass
+
+    @classmethod
+    def create_connection(cls):
+        conn = cls._device.create_connection()
+        return conn

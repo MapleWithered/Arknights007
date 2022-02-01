@@ -1,3 +1,4 @@
+import math
 from collections import namedtuple
 
 import cv2
@@ -18,10 +19,14 @@ def match_template(screenshot, template):
     ...
 
 
-def match_masked_template_best(img, template, mask, method=cv2.TM_SQDIFF_NORMED, show_result=False):
+def match_masked_template_best(img, template, mask, method=cv2.TM_CCOEFF_NORMED, show_result=False):
     assert template.shape == mask.shape
     # Apply template Matching
     res = cv2.matchTemplate(img, templ=template, method=method, mask=mask)
+    for i in range(res.shape[0]):
+        for j in range(res.shape[1]):
+            if math.isinf(res[i][j]) or math.isnan(res[i][j]):
+                res[i][j] = 0
     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
 
     # If the method is TM_SQDIFF or TM_SQDIFF_NORMED, take minimum

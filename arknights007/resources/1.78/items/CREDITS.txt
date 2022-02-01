@@ -1,3 +1,0 @@
-images from prts.wiki
-
-convert "$file" -background black -flatten -resize x48 "${file:12}"

@@ -34,11 +34,19 @@
     episode_right: [ 1910, 560 ]
     ocr_episode_id: [ 497,435,531,467 ]
   reward_scene:
-    reco_template: [ 878, 55, 1058, 261 ]
+    reco_template: [ 878, 55, 1058, 205 ]
     tick_button: [ 915, 915, 1000, 1000 ]
   resources:
     swipe_right: [ 1496, 540 ]
     swipe_left: [ 425, 540 ]
     swipe_middle: [ 960, 540 ]
+  before_battle:
+    start_button: [ 1655, 945, 1856, 1008 ]
+    stage_code: [ 1320, 115, 1450, 168 ]
+    stage_code_small_noise_square: [ 1442, 133, 1446, 137 ]
+    sanity_cost: [ 1766, 1014, 1842, 1052 ]
+    sanity_remain: [ 1672, 28, 1918, 95 ]
+    tickbox: [ 1700, 865, 1855, 910 ]
+    team_start: [ 1561, 686, 1742, 897 ]
   battle:
-    start_button: [1655, 945, 1856, 1008]
+    finished: [45, 865, 610, 1015]

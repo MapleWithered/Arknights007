@@ -19,3 +19,5 @@ resources:
   PR-B: [ 'PR-B-1', 'PR-B-2' ]
   PR-C: [ 'PR-C-1', 'PR-C-2' ]
   PR-D: [ 'PR-D-1', 'PR-D-2' ]
+other:
+  - ['OF-F1', 'OF-F2', 'OF-F3', 'OF-F4']

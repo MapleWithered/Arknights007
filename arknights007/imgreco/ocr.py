@@ -166,3 +166,4 @@ def ocr_all_stage_tag_and_std_position(stage_map, debug_show=False, cn_ocr_objec
     if debug_show:
         print(ocr_result)
     return ocr_result
+

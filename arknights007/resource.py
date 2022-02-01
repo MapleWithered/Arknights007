@@ -180,9 +180,9 @@ def get_stage_map_local(stage: str) -> typing.Optional[list[str]]:
         part0 = '-'.join(stage.split('-')[:-1])
         path = '/resources/' + part0
     else:
-        part0 = '-'.join(stage.split('-')[:-1])
-        if part0 in list(res):
-            return res[part0]
+        for other_map in res['other']:
+            if stage in other_map:
+                return other_map
         else:
             return None
     stage_map = dpath.util.get(res, path)
