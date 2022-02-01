@@ -77,8 +77,14 @@ def extract_result(target: str, all_result: list[OCRSTDSingleResult]):
     return None
 
 
-def ocr_rect_single_line(img_mat, rect: Rect = None, ocr_dict=None, debug_show=False) -> OCRSingleResult:
+def ocr_rect_single_line(img_mat, rect: Rect = None, ocr_dict=None, debug_show=False, bigger_box=0) -> OCRSingleResult:
     if rect is not None:
+        if bigger_box != 0:
+            x1 = rect.x1 - bigger_box
+            y1 = rect.y1 - bigger_box
+            x2 = rect.x2 + bigger_box
+            y2 = rect.y2 + bigger_box
+            rect = Rect(x1, y1, x2, y2)
         img_cropped = imgops.mat_crop(img_mat, rect)
     else:
         img_cropped = img_mat.copy()

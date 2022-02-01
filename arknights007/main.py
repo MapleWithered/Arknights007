@@ -2,6 +2,7 @@ import time
 
 import matplotlib.pyplot as plt
 
+import arknights007.task as task
 from adb import ADB
 import arknights007.imgreco.template as template
 import arknights007.imgreco.imgops as imgops
@@ -9,15 +10,21 @@ import arknights007.resource as res
 import navigator
 import arknights007.imgreco.ocr as ocr
 import arknights007.battle as battle
+import arknights007.ship as ship
 
 
 def run_stage(stage: str):
-    res = navigator.goto_stage(stage)
-    res = battle.start_battle(stage)
+    while True:
+        try:
+            res = navigator.goto_stage(stage)
+            res = battle.start_battle(stage)
+            break
+        except RuntimeError:
+            continue
     return res
 
-def test_navigator():
 
+def test_navigator():
     # print(res.get_stage_map_local("OF-F4"))
     # # stage_info = res.get_stage_info_full("1-1")
     # # stage_map: list = stage_info.stage_map
@@ -55,12 +62,25 @@ def test_navigator():
     # navigator.goto_stage("9-15")
     pass
 
+
+def battle_forever(stage):
+    counter = 0
+    while True:
+        res = run_stage(stage)
+        if not res:
+            time.sleep(180)
+        else:
+            counter += 1
+            print(counter, "Succeeded.")
+
+
 if __name__ == '__main__':
-    ADB.connect()
     counter = 0
     while True:
         res = run_stage("IW-6")
         if not res:
+            task.run_task()
+            ship.run_ship()
             time.sleep(180)
         else:
             counter += 1

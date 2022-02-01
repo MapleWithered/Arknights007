@@ -14,6 +14,7 @@ import imgreco.template as template
 import imgreco.ocr as ocr
 import resource as res
 import navigator
+from arknights007 import main_menu
 
 Size = namedtuple("Size", ['width', 'height'])
 Pos = namedtuple("Pos", ['x', 'y'])
@@ -49,22 +50,9 @@ def check_and_get_all_reward():
         navigator.press_std_rect("/task/get_all")
         time.sleep(2)
 
-def main_check_task_remain():
-
-    img = ADB.screencap_mat(gray=False, std_size=True)
-    img = imgops.mat_pick_color_rgb(img, Color(230, 98, 41))
-    corner_rect = res.get_pos("/main_menu/task_number")
-    img_cropped = imgops.mat_crop(img, Rect(*corner_rect))
-    img_cropped = imgops.mat_bgr2gray(img_cropped)
-    if np.sum(img_cropped) > 50000:
-        return True
-    else:
-        return False
-
-
 def run_task():
     navigator.back_to_main_menu()
-    if main_check_task_remain():
+    if main_menu.main_check_task_remain():
         main_to_task()
         check_and_get_all_reward()
         navigator.handle_reward_scene()
