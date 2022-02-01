@@ -10,6 +10,8 @@
     inventory: [ 1735, 923, 1844, 1039 ]
     ship: [ 1408, 879, 1683, 1010 ]
     friends: [ 444, 835, 629, 879 ]
+    task: [ 1090, 845, 1326, 970 ]
+    task_number: [1285, 800, 1378, 895]
   terminal:
     terminal_template: [ 75, 950, 155, 1030 ]
     main_story: [ 355, 1000 ]
@@ -32,7 +34,7 @@
     episode_now: [ 1425, 528 ]
     episode_left: [ 932, 558 ]
     episode_right: [ 1910, 560 ]
-    ocr_episode_id: [ 497,435,531,467 ]
+    ocr_episode_id: [ 497, 435, 531, 467 ]
   reward_scene:
     reco_template: [ 878, 55, 1058, 205 ]
     tick_button: [ 915, 915, 1000, 1000 ]
@@ -49,4 +51,7 @@
     tickbox: [ 1700, 865, 1855, 910 ]
     team_start: [ 1561, 686, 1742, 897 ]
   battle:
-    finished: [45, 865, 610, 1015]
+    finished: [ 45, 865, 610, 1015 ]
+  task:
+    get_all: [ 1720, 155, 1860, 250 ]
+    weekly: [ 1152, 24, 1388, 80 ]

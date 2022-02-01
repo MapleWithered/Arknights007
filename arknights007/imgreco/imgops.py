@@ -71,17 +71,17 @@ def mat_bgr2gray(mat):
     return cv2.cvtColor(mat, cv2.COLOR_BGR2GRAY)
 
 
-def mat_pick_color_rgb(mat, rgb: Color):
-    low_color = np.array([rgb.b - 3, rgb.g - 3, rgb.r - 3])
-    high_color = np.array([rgb.b + 3, rgb.g + 3, rgb.r + 3])
+def mat_pick_color_rgb(mat, rgb: Color, tolerance=3):
+    low_color = np.array([rgb.b - tolerance, rgb.g - tolerance, rgb.r - tolerance])
+    high_color = np.array([rgb.b + tolerance, rgb.g + tolerance, rgb.r + tolerance])
     mask = cv2.inRange(mat, low_color, high_color)
     res = cv2.bitwise_and(mat, mat, mask=mask)
     return res
 
 
-def mat_pick_grey(mat, light: int, range=3):
-    low_color = light - range
-    high_color = light + range
+def mat_pick_grey(mat, light: int, tolerance=3):
+    low_color = light - tolerance
+    high_color = light + tolerance
     mask = cv2.inRange(mat, low_color, high_color)
     res = cv2.bitwise_and(mat, mat, mask=mask)
     return res

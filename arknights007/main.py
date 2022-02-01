@@ -12,12 +12,12 @@ import arknights007.battle as battle
 
 
 def run_stage(stage: str):
-    navigator.goto_stage()
-    navigator.run_once()
+    res = navigator.goto_stage(stage)
+    res = battle.start_battle(stage)
+    return res
 
+def test_navigator():
 
-if __name__ == '__main__':
-    ADB.connect()
     # print(res.get_stage_map_local("OF-F4"))
     # # stage_info = res.get_stage_info_full("1-1")
     # # stage_map: list = stage_info.stage_map
@@ -53,9 +53,13 @@ if __name__ == '__main__':
     # navigator.goto_stage("PR-A-2")
     # navigator.goto_stage("SK-5")
     # navigator.goto_stage("9-15")
+    pass
+
+if __name__ == '__main__':
+    ADB.connect()
     counter = 0
     while True:
-        res = battle.start_battle("IW-8")
+        res = run_stage("IW-6")
         if not res:
             time.sleep(180)
         else:

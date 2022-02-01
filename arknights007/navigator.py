@@ -1,12 +1,15 @@
 import os
 import re
+import socket
 import time
 import typing
 from collections import namedtuple
 
 from cnocr import CnOcr
 from matplotlib import pyplot as plt
+from ruamel import yaml
 
+import arknights007.battle
 from adb import ADB
 import cv2
 import imgreco.imgops as imgops
@@ -367,7 +370,7 @@ def nav_resource_choose_category(stage: str):
         return False
 
 
-def nav_get_stagemap_and_choose_stage_ocr(stage: str):
+def nav_get_stagemap_and_choose_stage_ocr(stage: str, error_tolerance=10):
     ocr_dict = "0123456789-ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     cn_ocr = CnOcr(cand_alphabet=ocr_dict)
     stage_map = res.get_stage_map_local(stage)
@@ -376,7 +379,7 @@ def nav_get_stagemap_and_choose_stage_ocr(stage: str):
         stage_map = stage_info.stage_map
     target_index = stage_map.index(stage)
     error_count = 0
-    while error_count <= 10:
+    while error_count <= error_tolerance:
         ocrstd_result = ocr.ocr_all_stage_tag_and_std_position(stage_map, debug_show=False, cn_ocr_object=cn_ocr)
         visible_stage_index: list[int] = []
         for single_result in ocrstd_result:
@@ -416,140 +419,155 @@ def nav_get_stagemap_and_choose_stage_ocr(stage: str):
 
 
 def record_new(path: str):
+    class BreakIt(Exception):
+        pass
+
+    os.makedirs(os.path.split(path)[0], exist_ok=True)
 
     back_to_terminal()
 
     EVENT_LINE_RE = re.compile(r"(\S+): (\S+) (\S+) (\S+)$")
+
     records = []
     record_data = {
         'hw_ratio': res.get_img_path_suffix(),
-        'records': records
+        'width': ADB.get_resolution().width,
+        'height': ADB.get_resolution().height,
+        'mode': 'event'
     }
-    print('滑动屏幕以退出录制.')
-    print('开始录制, 请点击相关区域...')
+
     conn = ADB.create_connection()
     cmd = "shell:{}".format('getevent')
     conn.send(cmd)
-    result = bytearray()
+    time.sleep(1)
+    conn.socket.setblocking(0)
+    # 清空缓冲区（IO硬件信息）
     while True:
-        temp = conn.read(2147483647)
-        if temp:
-            result += temp
-        else:
+        try:
+            temp = conn.socket.recv(4096)
+        except:
             break
-    print(result)
-    while True:
-        x = 0
-        y = 0
-        point_list = []
-        touch_down = False
-        screen = self.adb.screenshot()
+    print('开始录制 请尽可能干净利落地点击相关区域（每次点击时间不要超过一秒） (长按屏幕6秒以上以退出录制)')
+    event_list = []
+    timestamp_list = []
+    touchdown_timer = 0
+    start_time = 0
+    touch_down = False
+    buf_line = bytearray()
+    last_press_index = 0
+    # 点循环 每次循环记录一个点
+    try:
         while True:
-            line = f.readline().decode('utf-8', 'replace').strip()
-            # print(line)
-            match = EVENT_LINE_RE.match(line.strip())
-            if match is not None:
-                dev, etype, ecode, data = match.groups()
-                if '/dev/input/event5' != dev:
-                    continue
-                etype, ecode, data = int(etype, 16), int(ecode, 16), int(data, 16)
-                # print(dev, etype, ecode, data)
-
-                if (etype, ecode) == (1, 330):
-                    touch_down = (data == 1)
-
-                if touch_down:
-                    if 53 == ecode:
-                        x = data
-                    elif 54 == ecode:
-                        y = data
-                    elif (etype, ecode, data) == (0, 0, 0):
-                        # print(f'point: ({x}, {y})')
-                        point_list.append((x, y))
-                elif (etype, ecode, data) == (0, 0, 0):
-                    break
-        logger.debug(f'point_list: {point_list}')
-        if len(point_list) == 1:
-            point = point_list[0]
-            x1 = max(0, point[0] - half_roi)
-            x2 = min(self.viewport[0] - 1, point[0] + half_roi)
-            y1 = max(0, point[1] - half_roi)
-            y2 = min(self.viewport[1] - 1, point[1] + half_roi)
-            roi = screen.crop((x1, y1, x2, y2))
-            step = len(records)
-            roi.save(os.path.join(record_dir, f'step{step}.png'))
-            record = {'point': point, 'img': f'step{step}.png', 'type': 'tap',
-                      'wait_seconds_after_touch': wait_seconds_after_touch,
-                      'threshold': threshold, 'repeat': 1, 'raise_exception': True}
-            logger.info(f'record: {record}')
-            records.append(record)
-            if wait_seconds_after_touch:
-                logger.info(f'请等待 {wait_seconds_after_touch}s...')
-                self.__wait(wait_seconds_after_touch)
-
-            logger.info('继续...')
-        elif len(point_list) > 1:
-            # 滑动时跳出循环
-            c = input('是否退出录制[Y/n]:')
-            if c.strip().lower() != 'n':
-                logger.info('停止录制...')
-                break
-            else:
-                # todo 处理屏幕滑动
+            try:
+                temp = conn.socket.recv(1)
+            except:
+                time.sleep(0.01)
+                if touch_down and time.time() - touchdown_timer > 5:
+                    raise BreakIt
                 continue
-    with open(os.path.join(record_dir, f'record.json'), 'w', encoding='utf-8') as f:
-        json.dump(record_data, f, ensure_ascii=False, indent=4, sort_keys=True)
+            buf_line += temp
+            if buf_line[-1] == 10:  # 读取了完整的一行
+                if start_time == 0:
+                    start_time = time.time()
+                time_stamp = time.time() - start_time
+                str_line = buf_line.decode("utf-8")
+                str_line = str_line.strip()
+                buf_line = bytearray()
+                match = EVENT_LINE_RE.match(str_line.strip())
+                if match is not None:
+                    dev, etype, ecode, data = match.groups()
+                    if '/dev/input/event5' != dev:
+                        continue
+                    etype, ecode, data = int(etype, 16), int(ecode, 16), int(data, 16)
+
+                    event_list.append(f"sendevent {dev} {etype} {ecode} {data}")  # 存下来
+                    timestamp_list.append(time_stamp)
+                    print(str_line, time_stamp)
+
+                    if (etype, ecode) == (1, 330):
+                        touch_down = (data == 1)
+                        if touch_down:
+                            last_press_index = len(event_list) - 1
+                            touchdown_timer = time.time()
+                        else:
+                            touchdown_timer = 0
+                    if touch_down and time.time() - touchdown_timer > 5:
+                        raise BreakIt
+    except BreakIt:
+        pass
+    event_list = event_list[:last_press_index - 1]
+    timestamp_list = timestamp_list[:last_press_index - 1]
+
+    record_data['event_list'] = event_list
+    record_data['timestamp_list'] = timestamp_list
+
+    with open(path, 'w', encoding='utf-8') as f:
+        yaml.dump(record_data, f, Dumper=yaml.RoundTripDumper, indent=2, allow_unicode=True, encoding='utf-8')
+
+
+def record_play(path):
+    with open(path, 'r', encoding='utf-8') as f:
+        record_data = yaml.load(f.read(), Loader=yaml.RoundTripLoader)
+
+    for i in range(len(record_data['event_list']))[:-1]:
+        cmd = record_data['event_list'][i]
+        ADB.get_device_object().shell(cmd)
+        time.sleep(record_data['timestamp_list'][i + 1] - record_data['timestamp_list'][i])
+    cmd = record_data['event_list'][len(record_data['event_list']) - 1]
+    ADB.get_device_object().shell(cmd)
+    time.sleep(3)
+
 
 def goto_special_stage(stage: str, allow_new_record=False):
-    def goto_stage_special_record(stage_name, config=None):
-        back_to_terminal()
+    back_to_terminal()
 
-        # 得到关卡前缀
-        last_char_index = len(stage) - 1
-        for i in range(len(stage))[::-1]:
-            if not _is_num_char(stage[i]):
-                last_char_index = i
-                break
-        stage_category = stage[:last_char_index + 1]
-        if stage_category[-1] == '-':
-            stage_category = stage_category[:-1]
+    # 得到关卡前缀
+    last_char_index = len(stage) - 1
+    for i in range(len(stage))[::-1]:
+        if not _is_num_char(stage[i]):
+            last_char_index = i
+            break
+    stage_category = stage[:last_char_index + 1]
+    if stage_category[-1] == '-':
+        stage_category = stage_category[:-1]
 
-        path = res.get_img_path('/special_stage_record/'+stage_category+'.yaml')
-        if not os.path.exists(path):
-            if allow_new_record:
-                print('开始录制 ' + stage_category)
-                record_new(path)
-            else:
-                return -1
+    path = res.get_img_path(
+        '/special_stage_record/' + str(ADB.get_resolution().height) + 'p/' + stage_category + '.yaml')
+    if not os.path.exists(path):
+        if allow_new_record:
+            print('开始录制 ' + stage_category)
+            record_new(path)
         else:
-            record_play(path)
-
-
-
-    pass
+            return -1
+    else:
+        record_play(path)
 
 
 def goto_stage(stage: str):
-    back_to_terminal()
-    if stage_is_main_chapter(stage) is not None:
-        nav_terminal_to_main_story()
-        nav_main_story_choose_act_and_episode(stage)
-    elif stage_is_resource(stage) is not None:
-        nav_terminal_to_resource()
-        if nav_resource_choose_category(stage) is False:
-            raise RuntimeError("日替资源关卡未开放")
-    else:
-        goto_special_stage(stage)
-        raise RuntimeError("TODO: 操作录制")
-    time.sleep(0.5)
-    nav_get_stagemap_and_choose_stage_ocr(stage)
-    time.sleep(1)
 
+    if arknights007.battle.before_battle_reco_stage_code() == stage:
+        return
 
-
-
+    try:
+        nav_get_stagemap_and_choose_stage_ocr(stage, error_tolerance=0)
+        time.sleep(1)
+    except:
+        back_to_terminal()
+        if stage_is_main_chapter(stage) is not None:
+            nav_terminal_to_main_story()
+            nav_main_story_choose_act_and_episode(stage)
+        elif stage_is_resource(stage) is not None:
+            nav_terminal_to_resource()
+            if nav_resource_choose_category(stage) is False:
+                raise RuntimeError("日替资源关卡未开放")
+        else:
+            goto_special_stage(stage)
+        time.sleep(0.5)
+        nav_get_stagemap_and_choose_stage_ocr(stage)
+        time.sleep(1)
 
 
 if __name__ == '__main__':
-    record_new('1-7')
+    goto_stage('IW-6')
+
     pass

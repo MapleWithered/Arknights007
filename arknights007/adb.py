@@ -184,3 +184,7 @@ class ADB:
     def create_connection(cls):
         conn = cls._device.create_connection()
         return conn
+
+    @classmethod
+    def get_device_object(cls):
+        return cls._device

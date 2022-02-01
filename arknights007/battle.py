@@ -174,6 +174,7 @@ def is_finished(screenshot_gray=None):
 def start_battle(ensure_stage_code: str = ''):
 
     if not navigator.is_battle_start_button_visible():
+        print("无法看到开始按钮")
         return False
 
     img_gray = ADB.screencap_mat(force=True, gray=True)
