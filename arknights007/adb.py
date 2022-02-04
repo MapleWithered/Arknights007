@@ -182,9 +182,13 @@ class ADB:
 
     @classmethod
     def create_connection(cls):
+        if cls._device is None:
+            cls.connect()
         conn = cls._device.create_connection()
         return conn
 
     @classmethod
     def get_device_object(cls):
+        if cls._device is None:
+            cls.connect()
         return cls._device

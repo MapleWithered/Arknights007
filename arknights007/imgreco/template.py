@@ -21,12 +21,15 @@ def match_template(screenshot, template):
 
 def match_masked_template_best(img, template, mask, method=cv2.TM_CCOEFF_NORMED, show_result=False):
     assert template.shape == mask.shape
+    mask = mask.copy()
+    mask = mask.astype(np.float32)
+    mask /= 255.0
     # Apply template Matching
     res = cv2.matchTemplate(img, templ=template, method=method, mask=mask)
-    for i in range(res.shape[0]):
-        for j in range(res.shape[1]):
-            if math.isinf(res[i][j]) or math.isnan(res[i][j]):
-                res[i][j] = 0
+    # for i in range(res.shape[0]):
+    #     for j in range(res.shape[1]):
+    #         if math.isinf(res[i][j]) or math.isnan(res[i][j]):
+    #             res[i][j] = 0
     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
 
     # If the method is TM_SQDIFF or TM_SQDIFF_NORMED, take minimum
@@ -36,7 +39,7 @@ def match_masked_template_best(img, template, mask, method=cv2.TM_CCOEFF_NORMED,
     else:
         top_left = max_loc
         val = max_val
-    bottom_right = (top_left[0] + template.shape[::-1][0], top_left[1] + template.shape[::-1][1])
+    bottom_right = (top_left[0] + template.shape[1::-1][0], top_left[1] + template.shape[1::-1][1])
 
     if show_result:
         res_img = img.copy()
@@ -85,9 +88,13 @@ def match_template_best(img, template, method=cv2.TM_SQDIFF_NORMED, show_result=
 
 
 def match_template_all(img_gray, template, mask=None, method=cv2.TM_CCOEFF_NORMED, score_threshold=0.82,
-                       show_result=False):
+                       show_result=False, group_rectangle=1):
     w, h = template.shape[::-1]
     res = cv2.matchTemplate(img_gray, template, method=method, mask=mask)
+    for i in range(res.shape[0]):
+        for j in range(res.shape[1]):
+            if math.isinf(res[i][j]) or math.isnan(res[i][j]):
+                res[i][j] = 0
     if show_result:
         plt.imshow(res)
         plt.show()
@@ -100,8 +107,8 @@ def match_template_all(img_gray, template, mask=None, method=cv2.TM_CCOEFF_NORME
     result_list: list[RectResult] = []
     rectangle_list: list = []
     for pt in zip(*loc[::-1]):
-        rectangle_list.append([pt[0], pt[1], pt[0]+w, pt[1]+h])
-    result = cv2.groupRectangles(rectangle_list, 1)
+        rectangle_list.append([pt[0], pt[1], pt[0] + w, pt[1] + h])
+    result = cv2.groupRectangles(rectangle_list, group_rectangle)
     for rect in result[0]:
         if show_result:
             cv2.rectangle(img_temp, (rect[0], rect[1]), (rect[2], rect[3]), (255, 0, 0), 5)

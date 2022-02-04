@@ -206,10 +206,12 @@ def start_battle(ensure_stage_code: str = ''):
     while not is_finished():
         time.sleep(1)
 
-    time.sleep(5)
+    time.sleep(8)
     navigator.press_std_rect("/battle/finished")
+    time.sleep(3)
     while not navigator.is_battle_start_button_visible():
-        time.sleep(1)
+        navigator.press_std_rect("/battle/finished")
+        time.sleep(5)
 
     return True
 

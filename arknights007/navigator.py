@@ -9,7 +9,7 @@ from cnocr import CnOcr
 from matplotlib import pyplot as plt
 from ruamel import yaml
 
-import arknights007.battle
+from arknights007 import battle
 from adb import ADB
 import cv2
 import imgreco.imgops as imgops
@@ -49,9 +49,9 @@ def swipe_std_pos(path_start, path_end, duration_ms):
 
 def is_main_menu():
     template_shortpath = "/main_menu/gear.png"
-    img_gray = ADB.screencap_mat(gray=True)
+    img_gray = ADB.screencap_mat(gray=True, std_size=True)
     pos_rect = res.get_pos("/main_menu/gear")
-    cropped = imgops.mat_crop(img_gray, imgops.from_std_rect(ADB.get_resolution(), Rect(*pos_rect)))
+    cropped = imgops.mat_crop(img_gray, Rect(*pos_rect))
     cropped = imgops.mat_pick_grey(cropped, 255)
     if not os.path.exists(res.get_img_path(template_shortpath)):
         cv2.imwrite(res.get_img_path(template_shortpath), cropped)
@@ -64,9 +64,9 @@ def is_main_menu():
 
 def is_terminal():
     template_shortpath = "/terminal/terminal_template.png"
-    img_gray = ADB.screencap_mat(gray=True)
+    img_gray = ADB.screencap_mat(gray=True, std_size=True)
     pos_rect = res.get_pos("/terminal/terminal_template")
-    cropped = imgops.mat_crop(img_gray, imgops.from_std_rect(ADB.get_resolution(), Rect(*pos_rect)))
+    cropped = imgops.mat_crop(img_gray, Rect(*pos_rect))
     cropped = imgops.mat_pick_grey(cropped, 235, 20)
     if not os.path.exists(res.get_img_path(template_shortpath)):
         cv2.imwrite(res.get_img_path(template_shortpath), cropped)
@@ -79,9 +79,9 @@ def is_terminal():
 
 def is_battle_start_button_visible():
     template_shortpath = "/before_battle/start_button.png"
-    img_gray = ADB.screencap_mat(gray=True)
+    img_gray = ADB.screencap_mat(gray=True, std_size=True)
     pos_rect = res.get_pos("/before_battle/start_button")
-    cropped = imgops.mat_crop(img_gray, imgops.from_std_rect(ADB.get_resolution(), Rect(*pos_rect)))
+    cropped = imgops.mat_crop(img_gray, Rect(*pos_rect))
     if not os.path.exists(res.get_img_path(template_shortpath)):
         cv2.imwrite(res.get_img_path(template_shortpath), cropped)
     terminal_template = res.get_img_gray(template_shortpath)
@@ -193,7 +193,9 @@ def handle_dialog():
 
 
 def handle_unknown_scene():
-    pass
+    if battle.is_finished():
+        press_std_rect("/battle/finished")
+        time.sleep(5)
 
 
 def main_menu_press_terminal():
@@ -418,13 +420,14 @@ def nav_get_stagemap_and_choose_stage_ocr(stage: str, error_tolerance=10):
     raise RuntimeError("ocr找不到关卡")
 
 
-def record_new(path: str):
+def record_new(path: str, start_from_terminal=True):
     class BreakIt(Exception):
         pass
 
     os.makedirs(os.path.split(path)[0], exist_ok=True)
 
-    back_to_terminal()
+    if start_from_terminal:
+        back_to_terminal()
 
     EVENT_LINE_RE = re.compile(r"(\S+): (\S+) (\S+) (\S+)$")
 
@@ -545,7 +548,7 @@ def goto_special_stage(stage: str, allow_new_record=False):
 
 def goto_stage(stage: str):
 
-    if arknights007.battle.before_battle_reco_stage_code() == stage:
+    if battle.before_battle_reco_stage_code() == stage:
         return
 
     try:

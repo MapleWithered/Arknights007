@@ -77,7 +77,9 @@ def extract_result(target: str, all_result: list[OCRSTDSingleResult]):
     return None
 
 
-def ocr_rect_single_line(img_mat, rect: Rect = None, ocr_dict=None, debug_show=False, bigger_box=0) -> OCRSingleResult:
+def ocr_rect_single_line(img_mat=None, rect: Rect = None, ocr_dict=None, debug_show=False, bigger_box=0) -> OCRSingleResult:
+    if img_mat is None:
+        img_mat = ADB.screencap_mat(std_size=True)
     if rect is not None:
         if bigger_box != 0:
             x1 = rect.x1 - bigger_box

@@ -129,3 +129,4 @@ dmypy.json
 .pyre/
 
 .idea/
+/arknights007/resources/game_data/~$skill_data.xlsx
