@@ -170,7 +170,6 @@ def ocr_all_stage_tag_and_std_position(stage_map, debug_show=False, cn_ocr_objec
             single_result = OCRSTDSingleResult(''.join(ocr_res[0]), rect_temp, ocr_res[1])
             if single_result.str in stage_map:
                 ocr_result.append(single_result)
-    # TODO: auto correction using stage_map
     if debug_show:
         print(ocr_result)
     return ocr_result

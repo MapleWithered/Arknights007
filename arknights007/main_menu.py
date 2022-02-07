@@ -57,8 +57,8 @@ def main_check_ship_remain():
     corner_rect = res.get_pos("/main_menu/ship_info")
     img_cropped = imgops.mat_crop(img, Rect(*corner_rect))
     img_cropped = imgops.mat_bgr2gray(img_cropped)
-    plt.imshow(img_cropped)
-    plt.show()
+    # plt.imshow(img_cropped)
+    # plt.show()
     if np.sum(img_cropped) > 80000:
         return True
     else:

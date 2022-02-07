@@ -243,6 +243,7 @@ def choose_skill_generic(scene_skill_keyword, category_limit, self_conflict_skil
         time.sleep(0.5)
 
 
+
 def reco_skills(debug_show=False):
     img_gray = ADB.screencap_mat(std_size=True, gray=False)
     time1 = time.time()

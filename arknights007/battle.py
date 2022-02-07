@@ -199,7 +199,7 @@ def start_battle(ensure_stage_code: str = ''):
 
     navigator.press_std_rect("/before_battle/team_start")
 
-    # TODO: while( in battle)
+    # TODO: bugfix. handle unexpecccted scene
     # After battle, handle unknown scene, if timeout , return False
     # For robust
 

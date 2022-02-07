@@ -2,6 +2,7 @@ import functools
 import os.path
 import subprocess
 import time
+import typing
 from collections import namedtuple
 from pathlib import Path
 
@@ -76,7 +77,7 @@ class ADB:
 
     @classmethod
     @functools.lru_cache()
-    def get_resolution(cls) -> Size:
+    def get_resolution(cls) -> typing.Optional[Size]:
         if cls._device is None:
             cls.connect()
         size = cls._device.wm_size()
@@ -126,8 +127,7 @@ class ADB:
     def get_top_activity(cls):
         if cls._device is None:
             cls.connect()
-        # TODO
-        # Ensure arknights is running
+        # TODO: feat. Ensure arknights is running
         return cls._device.get_top_activity()
 
     @classmethod
@@ -176,8 +176,7 @@ class ADB:
     def run_activity(cls):
         if cls._device is None:
             cls.connect()
-        # TODO
-        # Restart arknights when crashed
+        # TODO: feat. Restart arknights when crashed
         pass
 
     @classmethod

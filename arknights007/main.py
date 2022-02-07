@@ -85,5 +85,3 @@ if __name__ == '__main__':
         else:
             counter += 1
             print(counter, "Succeeded.")
-
-# TODO: delete debugging print and imshow !

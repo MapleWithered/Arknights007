@@ -5,3 +5,7 @@ opencv-python # 图像识别
 ruamel.yaml # yaml解析
 pure-python-adb # adb操作
 dpath # yaml-dict xpath访问
+Pillow  # 基本图像处理
+numpy   # cv总归要numpy的
+matplotlib  # debug的时候可以看图用
+requests    # 下载一些东西

@@ -71,13 +71,13 @@
     dormitory_4: [ 1258, 850 ]
     change_scene:
       clear_people: [ 760, 1015 ]
-      slot_1: [725, 300]
-      slot_2: [725, 725]
-      slot_3: [950, 300]
-      slot_4: [950, 725]
-      slot_5: [1150, 300]
-      now_emotion: [465, 145, 510, 185]
-      yes_btn: [1770, 1020]
+      slot_1: [ 725, 300 ]
+      slot_2: [ 725, 725 ]
+      slot_3: [ 950, 300 ]
+      slot_4: [ 950, 725 ]
+      slot_5: [ 1150, 300 ]
+      now_emotion: [ 465, 145, 510, 185 ]
+      yes_btn: [ 1770, 1020 ]
       skill_matrix:
         bumper_y: 521
         bumper_start_x: 620
@@ -89,14 +89,15 @@
     dormitory:
       info_btn: [ 100, 225 ]
       people_btn: [ 28, 351, 176, 482 ]
-      right_swipe_1: [1650, 800]
-      right_swipe_2: [1650, 200]
+      right_swipe_1: [ 1650, 800 ]
+      right_swipe_2: [ 1650, 200 ]
     meeting_room: [ 1513, 312, 1840, 400 ]
     enter_room_detail: [ 70, 1000 ]
     meeting_room_in:
-      clue_total_count: [648, 979, 695, 1012]
+      clue_total_count: [ 648, 979, 695, 1012 ]
       new_daily_clue: [ 1740, 200, 1885, 330 ]
       new_given_clue: [ 1740, 365, 1885, 485 ]
+      unlock_clue: [1023, 950, 1195, 1005]
       clue_slot_red_point:
         1: [ 664, 221 ]
         2: [ 967, 326 ]
@@ -116,3 +117,36 @@
     summary: [ 38, 135, 340, 224 ]
     summary_scene:
       ensure: [ 351, 518, 500, 555 ]
+      right_swipe_1: [ 1650, 800 ]
+      right_swipe_2: [ 1650, 500 ]
+      plus:
+        dy_to_anchor: -6
+        x_anchor: 648
+        ocr_rect_two_char_size: [ 75, 40 ]
+      room_matrix:
+        B004: [ 390, 310 ]
+        B005: [ 530, 310 ]
+        B101: [ 145, 340 ]
+        B102: [ 213, 340 ]
+        B103: [ 280, 340 ]
+        B104: [ 390, 340 ]
+        B105: [ 540, 340 ]
+        B201: [ 115, 370 ]
+        B202: [ 183, 370 ]
+        B203: [ 250, 370 ]
+        B204: [ 390, 370 ]
+        B205: [ 540, 370 ]
+        B301: [ 145, 400 ]
+        B302: [ 213, 400 ]
+        B303: [ 280, 400 ]
+        B304: [ 390, 400 ]
+        B305: [ 540, 400 ]
+        B404: [ 390, 430 ]
+    drone:
+      step_0: [545, 720]
+      step_1: [93, 1015]
+      step_2: [1836, 811]
+      step_3: [1445, 505]
+      step_4: [1417, 875]
+      step_5: [1695, 965]
+

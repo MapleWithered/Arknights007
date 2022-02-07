@@ -189,6 +189,7 @@ def handle_reward_scene():
 
 
 def handle_dialog():
+    # TODO: bugfix. 游戏数据同步失败 请重新登录
     pass
 
 
@@ -196,6 +197,7 @@ def handle_unknown_scene():
     if battle.is_finished():
         press_std_rect("/battle/finished")
         time.sleep(5)
+    # TODO: feat. 自动上线
 
 
 def main_menu_press_terminal():
@@ -210,15 +212,13 @@ def handle_close_button():
     mask_shortpath = "/close_button/close_button_mask.png"
 
     img = ADB.screencap_mat(force=True, std_size=True)
-    img_gray = imgops.mat_bgr2gray(img)
-    img_gray = imgops.mat_pick_grey(img_gray, 89, 3)
-    # cv2.imwrite("temp.png", img_gray)
-    # plt.imshow(img_gray)
+    # img_gray = imgops.mat_bgr2gray(img)
+    # img_gray = imgops.mat_pick_grey(img_gray, 89, 3)
 
-    img_template = res.get_img_gray(template_shortpath)
-    img_mask = res.get_img_gray(mask_shortpath)
+    img_template = res.get_img_bgr(template_shortpath)
+    img_mask = res.get_img_bgr(mask_shortpath)
 
-    result = template.match_masked_template_best(img_gray, img_template, img_mask)
+    result = template.match_masked_template_best(img, img_template, img_mask, method=cv2.TM_CCOEFF_NORMED)
     rect = result.rect
     val = result.val
 
@@ -230,7 +230,7 @@ def handle_close_button():
         return False
 
 
-# TODO: handle 正在提交至神经网络
+# TODO: feat. 正在提交至神经网络
 
 def back_to_main_menu():
     error_counter = 0
@@ -571,6 +571,6 @@ def goto_stage(stage: str):
 
 
 if __name__ == '__main__':
-    goto_stage('IW-6')
+    handle_close_button()
 
     pass

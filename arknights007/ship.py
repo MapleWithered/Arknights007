@@ -15,6 +15,7 @@ import imgreco.ocr as ocr
 import resource as res
 import navigator
 from arknights007 import main_menu
+from arknights007 import ship_skill
 
 Size = namedtuple("Size", ['width', 'height'])
 Pos = namedtuple("Pos", ['x', 'y'])
@@ -57,8 +58,8 @@ def check_and_press_blue_button():
         imgops.mat_pick_color_rgb(img_down, color_blue_when_red_pressed, tolerance=14))
     img_down_red_p = imgops.mat_bgr2gray(imgops.mat_pick_color_rgb(img_down, color_red_when_blue_pressed, tolerance=10))
 
-    plt.imshow(img_up)
-    plt.show()
+    # plt.imshow(img_up)
+    # plt.show()
 
     if np.sum(img_up_blue) > 400000:  # 上蓝下空 未按
         navigator.press_std_rect(path_up)
@@ -88,7 +89,7 @@ def reco_bottom_first_button():
     img = ADB.screencap_mat(gray=False, std_size=True)
     rect_1 = res.get_pos("/ship/bottom_1")
     img_1 = imgops.mat_crop(img, Rect(*rect_1))
-    ocr_1 = ocr.ocr_rect_single_line(img, rect=Rect(*rect_1), ocr_dict='可收获订单交付干员信赖疲劳线索搜集', debug_show=True,
+    ocr_1 = ocr.ocr_rect_single_line(img, rect=Rect(*rect_1), ocr_dict='可收获订单交付干员信赖疲劳线索搜集', debug_show=False,
                                      bigger_box=5)
     return ocr_1.str
 
@@ -97,7 +98,7 @@ def reco_bottom_second_button():
     img = ADB.screencap_mat(gray=False, std_size=True)
     rect_2 = res.get_pos("/ship/bottom_2")
     img_2 = imgops.mat_crop(img, Rect(*rect_2))
-    ocr_2 = ocr.ocr_rect_single_line(img, rect=Rect(*rect_2), ocr_dict='可收获订单交付干员信赖疲劳线索搜集', debug_show=True,
+    ocr_2 = ocr.ocr_rect_single_line(img, rect=Rect(*rect_2), ocr_dict='可收获订单交付干员信赖疲劳线索搜集', debug_show=False,
                                      bigger_box=5)
     return ocr_2.str
 
@@ -125,10 +126,10 @@ def exist_new_daily_given_clue():
     img_down = imgops.mat_crop(img, Rect(*rect_down))
     img_down = imgops.mat_bgr2gray(imgops.mat_pick_color_rgb(img_down, color_new_red, tolerance=5))
 
-    plt.imshow(img_up)
-    plt.show()
-    plt.imshow(img_down)
-    plt.show()
+    # plt.imshow(img_up)
+    # plt.show()
+    # plt.imshow(img_down)
+    # plt.show()
 
     return {"daily": np.sum(img_up) > 20000, "given": np.sum(img_down) > 20000}
 
@@ -155,7 +156,7 @@ def reco_clue_total_number():
     # Scene: before meeting_room
     img = ADB.screencap_mat(std_size=True, gray=False)
     rect_std = Rect(*res.get_pos('/ship/meeting_room_in/clue_total_count'))
-    ocr_result = ocr.ocr_rect_single_line(img, rect_std, '0123456789', debug_show=True, bigger_box=0)
+    ocr_result = ocr.ocr_rect_single_line(img, rect_std, '0123456789', debug_show=False, bigger_box=0)
     return int(ocr_result.str)
 
 
@@ -189,7 +190,7 @@ def get_daily_clue():  # Suppose have "NEW" icon
     # Scene: daily_take_button
     img_take_scene = ADB.screencap_mat(gray=False, std_size=True)
     if (img_take_scene[take_button_pos[1]][take_button_pos[0]] == np.array([86, 86, 86])).all():
-        # NEW, with autotake failed
+        # 有NEW，且手动领取为灰色
         give_out_one_clue()
         new_reco = exist_new_daily_given_clue()
         if not new_reco['daily']:
@@ -197,32 +198,11 @@ def get_daily_clue():  # Suppose have "NEW" icon
         else:
             navigator.press_std_rect("/ship/meeting_room_in/new_daily_clue")
             time.sleep(1)
-
-    # Auto take succeeded, need to manually take
-    # Scene: daily_take_button
-    # Try to press
-    navigator.press_std_pos("/ship/meeting_room_in/new_daily_clue_take_button")
-    time.sleep(2)
-    while True:
-        # Scene: take_button
-        # Todo: ensure!
-        img_take_scene = ADB.screencap_mat(gray=False, std_size=True)
-        if (img_take_scene[take_button_pos[1]][take_button_pos[0]] == np.array([86, 86, 86])).all():
-            # Successfully taken
-            navigator.handle_close_button()
-            time.sleep(0.5)
-            break
-        elif (img_take_scene[take_button_pos[1]][take_button_pos[0]] == np.array([0, 117, 168])).all():
-            # Failed to take, try to give
-            give_out_one_clue()
-            new_reco = exist_new_daily_given_clue()
-            if not new_reco['daily']:
-                return
-            else:
-                navigator.press_std_rect("/ship/meeting_room_in/new_daily_clue")
-                time.sleep(1)
-                navigator.press_std_pos("/ship/meeting_room_in/new_daily_clue_take_button")
-    # Scene: meeting_room
+    else:
+        # 有NEW，且手动领取为蓝色 此时由于自有库总线索至多为9，因此可以直接点
+        navigator.press_std_pos("/ship/meeting_room_in/new_daily_clue_take_button")
+        time.sleep(2)  # 这里如果成功的话就直接关对话框了
+        return True
 
 
 def get_given_clue():
@@ -235,10 +215,13 @@ def get_given_clue():
     time.sleep(2)
     navigator.press_std_pos("/ship/enter_room_detail")
     time.sleep(1)
-    # TODO: 点完之后会自动返回吗？
 
 
 def handle_clue():
+    check_and_unpress_blue_button()
+    path_zoom_out = res.get_img_path('/common_record/zoom_out.yaml')
+    navigator.record_play(path_zoom_out)
+    time.sleep(0.5)
     navigator.press_std_rect('/ship/meeting_room')
     time.sleep(1.5)
     clue_total = reco_clue_total_number()
@@ -250,6 +233,9 @@ def handle_clue():
     put_unputted_clue()
     get_daily_clue()
     get_given_clue()
+    put_unputted_clue()
+    navigator.press_std_rect("/ship/meeting_room_in/unlock_clue")
+    time.sleep(2)
     put_unputted_clue()
     while not ensure_and_press_summary(press=False):
         navigator.press_std_rect("/navigate_bar/back_black")
@@ -287,8 +273,8 @@ def check_and_unpress_blue_button():
         imgops.mat_pick_color_rgb(img_down, color_blue_when_red_pressed, tolerance=14))
     img_down_red_p = imgops.mat_bgr2gray(imgops.mat_pick_color_rgb(img_down, color_red_when_blue_pressed, tolerance=10))
 
-    plt.imshow(img_up)
-    plt.show()
+    # plt.imshow(img_up)
+    # plt.show()
 
     if np.sum(img_up_blue) > 400000:  # 上蓝下空 未按
         return True
@@ -353,7 +339,7 @@ def summary_find_dormitory():
     img_gray = imgops.mat_pick_grey(img_gray, 255)
     template_shortpath = '/ship/summary_scene/dormitory_icon.png'
     img_template = res.get_img_gray(template_shortpath)
-    template.match_template_best(img_gray, img_template, show_result=True)
+    template.match_template_best(img_gray, img_template, show_result=False)
 
 
 def is_dormitory_change_people_scene():
@@ -371,9 +357,13 @@ def is_dormitory_change_people_scene():
 
 
 def handle_tired():
-    # TODO: 最恐怖的……换班。
     dormitory_change_people()
+    # 基建首页
     put_up_new_people()
+
+    while not ensure_and_press_summary(press=False):
+        navigator.press_std_rect("/navigate_bar/back_black")
+        time.sleep(3)
 
 
 def main_to_ship():
@@ -395,7 +385,7 @@ def change_people_scene_detect_number_already() -> list[bool]:
     return list_exist
 
 
-def dormitory_change_people(upper_emotion=24, new_people_emotion_lower_or_equal_than=1):
+def dormitory_change_people(upper_emotion=24, new_people_emotion_lower_or_equal_than=12):
     all_people_happy = False
     for i in range(1, 5):
         assert check_and_unpress_blue_button(), RuntimeError("无法回到基建首页")
@@ -406,41 +396,50 @@ def dormitory_change_people(upper_emotion=24, new_people_emotion_lower_or_equal_
         navigator.press_std_pos('/ship/dormitory/info_btn')
         navigator.press_std_rect('/ship/dormitory/people_btn')
         assert is_dormitory_change_people_scene(), RuntimeError("不在进驻信息界面")
-
+        # 撤掉满心情的干员
         img_template = res.get_img_gray('/ship/dormitory/delete_people.png')
         img_gray = ADB.screencap_mat(std_size=True, gray=True)
-        result = template.match_template_all(img_gray, img_template, None, cv2.TM_CCOEFF_NORMED, 0.95, True)
+        result = template.match_template_all(img_gray, img_template, None, cv2.TM_CCOEFF_NORMED, 0.95,
+                                             show_result=False)
         for single_res in result:
             pos = (single_res.rect.x1 - 110, single_res.rect.y1 + 85)
             emotion_num_rect = Rect(pos[0], pos[1], pos[0] + 37, pos[1] + 27)
-            ocr_result = ocr.ocr_rect_single_line(img_gray, emotion_num_rect, ocr_dict='0123456789', debug_show=True,
+            ocr_result = ocr.ocr_rect_single_line(img_gray, emotion_num_rect, ocr_dict='0123456789', debug_show=False,
                                                   bigger_box=0)
             if int(ocr_result.str) >= upper_emotion:
                 ADB.input_press_rect(imgops.from_std_rect(ADB.get_resolution(), single_res.rect))
+                time.sleep(0.5)
+        # 翻页
         ADB.input_swipe_pos(
             imgops.from_std_pos(ADB.get_resolution(), Pos(*res.get_pos('/ship/dormitory/right_swipe_1'))),
             imgops.from_std_pos(ADB.get_resolution(), Pos(*res.get_pos('/ship/dormitory/right_swipe_2'))),
             200)
         img_gray = ADB.screencap_mat(std_size=True, gray=True)
-        result = template.match_template_all(img_gray, img_template, None, cv2.TM_CCOEFF_NORMED, 0.95, True)
+        result = template.match_template_all(img_gray, img_template, None, cv2.TM_CCOEFF_NORMED, 0.95,
+                                             show_result=False)
         for single_res in result:
             pos = (single_res.rect.x1 - 110, single_res.rect.y1 + 85)
             emotion_num_rect = Rect(pos[0], pos[1], pos[0] + 37, pos[1] + 27)
-            ocr_result = ocr.ocr_rect_single_line(img_gray, emotion_num_rect, ocr_dict='0123456789', debug_show=True,
+            ocr_result = ocr.ocr_rect_single_line(img_gray, emotion_num_rect, ocr_dict='0123456789', debug_show=False,
                                                   bigger_box=0)
             if int(ocr_result.str) >= upper_emotion:
                 ADB.input_press_rect(imgops.from_std_rect(ADB.get_resolution(), single_res.rect))
-        ADB.input_swipe_pos(
-            imgops.from_std_pos(ADB.get_resolution(), Pos(*res.get_pos('/ship/dormitory/right_swipe_1'))),
-            imgops.from_std_pos(ADB.get_resolution(), Pos(*res.get_pos('/ship/dormitory/right_swipe_2'))),
-            200)
+                time.sleep(0.5)
+        # 寻找空位 上干员
         img_template = res.get_img_gray('/ship/dormitory/new_people.png')
         img_gray = ADB.screencap_mat(std_size=True, gray=True)
         result = template.match_template_best(img_gray, img_template, method=cv2.TM_CCOEFF_NORMED)
-        if result.val > 0.9:  # 有空位
+        if result.val < 0.9:
+            # 下半页没有空位，去上半页搜空位
+            ADB.input_swipe_pos(
+                imgops.from_std_pos(ADB.get_resolution(), Pos(*res.get_pos('/ship/dormitory/right_swipe_2'))),
+                imgops.from_std_pos(ADB.get_resolution(), Pos(*res.get_pos('/ship/dormitory/right_swipe_1'))),
+                200)
+            img_gray = ADB.screencap_mat(std_size=True, gray=True)
+            result = template.match_template_best(img_gray, img_template, method=cv2.TM_CCOEFF_NORMED)
+        if result.val >= 0.9:  # 有空位
             ADB.input_press_rect(imgops.from_std_rect(ADB.get_resolution(), result.rect))
             time.sleep(1.5)
-            # 换新干员
             # 确认心情排序
             path_sort_emotion = res.get_img_path('/ship/dormitory/sort_emotion.yaml')
             navigator.record_play(path_sort_emotion)
@@ -452,12 +451,13 @@ def dormitory_change_people(upper_emotion=24, new_people_emotion_lower_or_equal_
                     min_slot_available = j
                     break
             assert min_slot_available != 0, "不是说好的有空位的吗（疑惑）"
+            # 选新干员
             for j in range(min_slot_available, 6):
                 navigator.press_std_pos("/ship/change_scene/slot_" + str(j))
                 time.sleep(0.5)
                 img = ADB.screencap_mat(std_size=True)
                 std_rect = Rect(*res.get_pos("/ship/change_scene/now_emotion"))
-                ocr_result = ocr.ocr_rect_single_line(img, std_rect, '0123456789', True)
+                ocr_result = ocr.ocr_rect_single_line(img, std_rect, '0123456789', debug_show=False)
                 if int(ocr_result.str) > new_people_emotion_lower_or_equal_than:
                     navigator.press_std_pos("/ship/change_scene/slot_" + str(j))
                     all_people_happy = True
@@ -476,23 +476,141 @@ def dormitory_change_people(upper_emotion=24, new_people_emotion_lower_or_equal_
 
 
 def dormitory_fill_people():
-    pass
+    ensure_and_press_summary()
+    anchor_x = res.get_pos("/ship/summary_scene/plus/x_anchor")
+    anchor_dy = res.get_pos("/ship/summary_scene/plus/dy_to_anchor")
+    ocr_rect_size = res.get_pos("/ship/summary_scene/plus/ocr_rect_two_char_size")
+    swipe_counter = 0
+    while swipe_counter <= 7:
+        img = ADB.screencap_mat(std_size=True, gray=False)
+        img_template = res.get_img_bgr("/ship/summary_scene/plus.png")
+        tm_result = template.match_template_all(img, img_template, None, cv2.TM_CCOEFF_NORMED, 0.7, show_result=False,
+                                                group_rectangle=1)
+        task = ''
+        task_plus_rect = None
+        for sg_result in tm_result:
+            ocr_rect = Rect(anchor_x, sg_result.rect.y1 + anchor_dy, anchor_x + ocr_rect_size[0],
+                            sg_result.rect.y1 + anchor_dy + ocr_rect_size[1])
+            ocr_result = ocr.ocr_rect_single_line(img, ocr_rect, "控制会客贸易制造发电办公宿舍加工训练", debug_show=False)
+            if ocr_result.str in ['宿舍']:
+                task = "dorm"
+                task_plus_rect = sg_result.rect
+                ADB.input_press_rect(imgops.from_std_rect(ADB.get_resolution(), ocr_rect))
+                time.sleep(0.5)
+                break
+        if task == '':  # 全填好了，下一页
+            ADB.input_swipe_pos(
+                imgops.from_std_pos(ADB.get_resolution(), Pos(*res.get_pos('/ship/summary_scene/right_swipe_1'))),
+                imgops.from_std_pos(ADB.get_resolution(), Pos(*res.get_pos('/ship/summary_scene/right_swipe_2'))),
+                500)
+            time.sleep(3)
+            swipe_counter += 1
+            continue
+        ADB.input_press_rect(imgops.from_std_rect(ADB.get_resolution(), task_plus_rect))
+        # 填闲人干员进宿舍
+        time.sleep(1)
+
+        # TODO: infinished 按照模版先写了一半 还没写完 现在宿舍里还不会自动填人
+
+        while not ensure_summary_scene():
+            navigator.press_std_pos("/ship/change_scene/yes_btn")
+            time.sleep(1.5)
+
+
+def reco_room_number():
+    img = ADB.screencap_mat(std_size=True, gray=False)
+    img = imgops.mat_pick_color_rgb(img, Color(100, 176, 210), 6)
+    img_gray = imgops.mat_bgr2gray(img)
+    room_list = ["B004", "B005", "B101", "B102", "B103", "B104", "B105", "B201", "B202", "B203", "B204", "B205", "B301",
+                 "B302", "B303", "B304", "B305", "B404"]
+    for room in room_list:
+        pos = res.get_pos("/ship/summary_scene/room_matrix/" + room)
+        if img_gray[pos[1]][pos[0]]:
+            return room
+        else:
+            continue
+
+
+def room_number_to_category(room_number: typing.Optional[str] = None) -> int:
+    if room_number is None:
+        room_number = reco_room_number()
+    room_category_dict: dict[str, int] = res.load_yaml("user_config/ship_manufactory_room.yaml")
+    if room_number not in room_category_dict:
+        return 0
+    else:
+        return room_category_dict[room_number]
 
 
 def put_up_new_people():
-    pass  # TODO: now
+    ensure_and_press_summary()
+    anchor_x = res.get_pos("/ship/summary_scene/plus/x_anchor")
+    anchor_dy = res.get_pos("/ship/summary_scene/plus/dy_to_anchor")
+    ocr_rect_size = res.get_pos("/ship/summary_scene/plus/ocr_rect_two_char_size")
+    swipe_counter = 0
+    while swipe_counter <= 7:
+        img = ADB.screencap_mat(std_size=True, gray=False)
+        img_template = res.get_img_bgr("/ship/summary_scene/plus.png")
+        tm_result = template.match_template_all(img, img_template, None, cv2.TM_CCOEFF_NORMED, 0.7, show_result=False,
+                                                group_rectangle=1)
+        task = ''
+        task_plus_rect = None
+        for sg_result in tm_result:
+            ocr_rect = Rect(anchor_x, sg_result.rect.y1 + anchor_dy, anchor_x + ocr_rect_size[0],
+                            sg_result.rect.y1 + anchor_dy + ocr_rect_size[1])
+            ocr_result = ocr.ocr_rect_single_line(img, ocr_rect, "控制会客贸易制造发电办公宿舍加工训练", debug_show=False)
+            if ocr_result.str in ['控制', '会客', '贸易', '制造', '发电', '办公']:
+                task = ['ctrl', 'meet', 'tra', 'man', 'pow', 'hire'][
+                    ['控制', '会客', '贸易', '制造', '发电', '办公'].index(ocr_result.str)]
+                task_plus_rect = sg_result.rect
+                ADB.input_press_rect(imgops.from_std_rect(ADB.get_resolution(), ocr_rect))
+                time.sleep(0.5)
+                break
+        if task == '':  # 全清光了，下一页
+            ADB.input_swipe_pos(
+                imgops.from_std_pos(ADB.get_resolution(), Pos(*res.get_pos('/ship/summary_scene/right_swipe_1'))),
+                imgops.from_std_pos(ADB.get_resolution(), Pos(*res.get_pos('/ship/summary_scene/right_swipe_2'))),
+                500)
+            time.sleep(3)
+            swipe_counter += 1
+            continue
+        if task == 'man':  # 制造站 要知道分类
+            man_category = room_number_to_category()
+        else:
+            man_category = 0
+        ADB.input_press_rect(imgops.from_std_rect(ADB.get_resolution(), task_plus_rect))
+        time.sleep(1.5)
+        ship_skill.choose_skill(task, man_category)
+        while not ensure_summary_scene():
+            navigator.press_std_pos("/ship/change_scene/yes_btn")
+            time.sleep(1.5)
 
 
-def run_ship():
+def handle_drone():
+    assert ensure_and_press_summary(press=False), RuntimeError("不在基建首页")
+    path_zoom_out = res.get_img_path('/common_record/zoom_out.yaml')
+    navigator.record_play(path_zoom_out)
+    for i in range(6):
+        navigator.press_std_pos("/ship/drone/step_" + str(i))
+        time.sleep(1)
+    while not ensure_and_press_summary(press=False):
+        navigator.press_std_rect("/navigate_bar/back_black")
+        time.sleep(3)
+
+
+def run_ship(force=False):
     navigator.back_to_main_menu()
-    if main_menu.main_check_ship_remain():
+    if main_menu.main_check_ship_remain() or force:
         main_to_ship()
         check_and_press_blue_button()
         check_and_press_blue_bottom_button()
         handle_clue()
         handle_tired()
+        check_and_press_blue_button()
+        check_and_press_blue_bottom_button()
+        handle_drone()
         navigator.back_to_main_menu()
 
 
 if __name__ == '__main__':
-    run_ship()
+    run_ship(True)
+    # TODO: Feat. 当有更高优先级时把低优先级的换下来

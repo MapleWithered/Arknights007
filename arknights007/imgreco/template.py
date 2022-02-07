@@ -26,10 +26,7 @@ def match_masked_template_best(img, template, mask, method=cv2.TM_CCOEFF_NORMED,
     mask /= 255.0
     # Apply template Matching
     res = cv2.matchTemplate(img, templ=template, method=method, mask=mask)
-    # for i in range(res.shape[0]):
-    #     for j in range(res.shape[1]):
-    #         if math.isinf(res[i][j]) or math.isnan(res[i][j]):
-    #             res[i][j] = 0
+    res[np.logical_or(np.isinf(res), np.isnan(res))] = (1 if method in [cv2.TM_SQDIFF, cv2.TM_SQDIFF_NORMED] else 0)
     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
 
     # If the method is TM_SQDIFF or TM_SQDIFF_NORMED, take minimum
@@ -43,7 +40,8 @@ def match_masked_template_best(img, template, mask, method=cv2.TM_CCOEFF_NORMED,
 
     if show_result:
         res_img = img.copy()
-        res_img = cv2.cvtColor(res_img, cv2.COLOR_GRAY2BGR)
+        if len(res_img.shape) == 2:
+            res_img = cv2.cvtColor(res_img, cv2.COLOR_GRAY2BGR)
         cv2.rectangle(res_img, top_left, bottom_right, (255, 0, 0), 5)
 
         plt.subplot(121), plt.imshow(res, cmap='gray')
@@ -89,7 +87,7 @@ def match_template_best(img, template, method=cv2.TM_SQDIFF_NORMED, show_result=
 
 def match_template_all(img_gray, template, mask=None, method=cv2.TM_CCOEFF_NORMED, score_threshold=0.82,
                        show_result=False, group_rectangle=1):
-    w, h = template.shape[::-1]
+    w, h = template.shape[:2][::-1]
     res = cv2.matchTemplate(img_gray, template, method=method, mask=mask)
     for i in range(res.shape[0]):
         for j in range(res.shape[1]):
@@ -103,7 +101,8 @@ def match_template_all(img_gray, template, mask=None, method=cv2.TM_CCOEFF_NORME
     else:
         loc = np.where(res >= score_threshold)
     img_temp = img_gray.copy()
-    img_temp = cv2.cvtColor(img_temp, cv2.COLOR_GRAY2BGR)
+    if len(template.shape) == 2:
+        img_temp = cv2.cvtColor(img_temp, cv2.COLOR_GRAY2BGR)
     result_list: list[RectResult] = []
     rectangle_list: list = []
     for pt in zip(*loc[::-1]):
