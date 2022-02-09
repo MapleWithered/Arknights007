@@ -77,7 +77,7 @@ def battle_forever(stage):
 if __name__ == '__main__':
     counter = 0
     while True:
-        res = run_stage("IW-6")
+        res = run_stage("1-7")
         if not res:
             task.run_task()
             ship.run_ship()

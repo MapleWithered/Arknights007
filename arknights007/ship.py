@@ -154,10 +154,14 @@ def put_unputted_clue():
 
 def reco_clue_total_number():
     # Scene: before meeting_room
+    # Todo: ensure!
     img = ADB.screencap_mat(std_size=True, gray=False)
     rect_std = Rect(*res.get_pos('/ship/meeting_room_in/clue_total_count'))
     ocr_result = ocr.ocr_rect_single_line(img, rect_std, '0123456789', debug_show=False, bigger_box=0)
-    return int(ocr_result.str)
+    try:
+        return int(ocr_result.str)
+    except:
+        raise RuntimeError("不在会客室门外 无法获取总线索数量")
 
 
 def give_out_one_clue():
@@ -221,10 +225,15 @@ def handle_clue():
     check_and_unpress_blue_button()
     path_zoom_out = res.get_img_path('/common_record/zoom_out.yaml')
     navigator.record_play(path_zoom_out)
-    time.sleep(0.5)
+    time.sleep(1)
     navigator.press_std_rect('/ship/meeting_room')
     time.sleep(1.5)
-    clue_total = reco_clue_total_number()
+    try:
+        clue_total = reco_clue_total_number()
+    except RuntimeError:    # zoom out了之后下一次点击可能失效
+        navigator.press_std_rect('/ship/meeting_room')
+        time.sleep(1.5)
+        clue_total = reco_clue_total_number()
     navigator.press_std_pos("/ship/enter_room_detail")
     time.sleep(1)
     while clue_total >= 9:
@@ -510,7 +519,7 @@ def dormitory_fill_people():
         # 填闲人干员进宿舍
         time.sleep(1)
 
-        # TODO: infinished 按照模版先写了一半 还没写完 现在宿舍里还不会自动填人
+        # TODO: unfinished 按照模版先写了一半 还没写完 现在宿舍里还不会自动填人
 
         while not ensure_summary_scene():
             navigator.press_std_pos("/ship/change_scene/yes_btn")
