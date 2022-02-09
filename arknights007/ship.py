@@ -154,7 +154,6 @@ def put_unputted_clue():
 
 def reco_clue_total_number():
     # Scene: before meeting_room
-    # Todo: ensure!
     img = ADB.screencap_mat(std_size=True, gray=False)
     rect_std = Rect(*res.get_pos('/ship/meeting_room_in/clue_total_count'))
     ocr_result = ocr.ocr_rect_single_line(img, rect_std, '0123456789', debug_show=False, bigger_box=0)
@@ -518,8 +517,6 @@ def dormitory_fill_people():
         ADB.input_press_rect(imgops.from_std_rect(ADB.get_resolution(), task_plus_rect))
         # 填闲人干员进宿舍
         time.sleep(1)
-
-        # TODO: unfinished 按照模版先写了一半 还没写完 现在宿舍里还不会自动填人
 
         while not ensure_summary_scene():
             navigator.press_std_pos("/ship/change_scene/yes_btn")
