@@ -1,0 +1,170 @@
+"1.78":
+  comment: "16:9"
+  main_menu:
+    gear: [ 36, 25, 106, 93 ]
+    terminal: [ 1360, 186, 1552, 294 ]
+    shopping_center: [ 1144, 704, 1364, 781 ]
+    public_recruit: [ 1419, 725, 1601, 797 ]
+    activity_1: [ 1649, 183, 1870, 223 ]
+    activity_2: [ 1649, 308, 1878, 348 ]
+    inventory: [ 1735, 923, 1844, 1039 ]
+    ship: [ 1408, 879, 1683, 1010 ]
+    friends: [ 444, 835, 629, 879 ]
+    task: [ 1090, 845, 1326, 970 ]
+    task_number: [ 1285, 800, 1378, 895 ]
+    sanity_remain: [ 1140, 195, 1335, 338 ]
+    ship_info: [ 1588, 837, 1725, 975 ]
+  terminal:
+    terminal_template: [ 75, 950, 155, 1030 ]
+    main_story: [ 355, 1000 ]
+    interlude: [ 595, 1000 ]
+    side_story: [ 835, 1000 ]
+    resource: [ 1075, 1000 ]
+    extermination: [ 1315, 1000 ]
+    rogue: [ 1555, 1000 ]
+    championship: [ 1795, 1000 ]
+  navigate_bar:
+    back_black: [ 46, 30, 86, 86 ]
+    back_white: [ 68, 46, 93, 90 ]
+    nav_menu: [ 300, 33, 500, 80 ]
+    nav_main: [ 97, 228, 175, 451 ]
+    nav_terminal: [ 751, 74, 832, 320 ]
+    nav_public_recruit: [ 1351, 337, 1516, 462 ]
+  public_recruit:
+    flag: [1255, 106, 1288, 147]
+  main_story:
+    act_now: [ 96, 352 ]
+    act_up: [ 96, 200 ]
+    act_down: [ 96, 823 ]
+    episode_now: [ 1425, 528 ]
+    episode_left: [ 932, 558 ]
+    episode_right: [ 1910, 560 ]
+    ocr_episode_id: [ 497, 435, 531, 467 ]
+  reward_scene:
+    reco_template: [ 878, 55, 1058, 205 ]
+    tick_button: [ 915, 915, 1000, 1000 ]
+  resources:
+    swipe_right: [ 1496, 540 ]
+    swipe_left: [ 425, 540 ]
+    swipe_middle: [ 960, 540 ]
+  before_battle:
+    start_button: [ 1655, 970, 1856, 1030 ]
+    stage_code: [ 1384, 115, 1514, 168 ]
+    stage_code_small_noise_square: [ 1507, 133, 1511, 137 ]
+    sanity_cost: [ 1766, 1035, 1842, 1070 ]
+    sanity_remain: [ 1672, 28, 1918, 95 ]
+    tickbox: [ 1700, 890, 1855, 935 ]
+    team_start: [ 1561, 686, 1742, 897 ]
+  battle:
+    finished: [ 85, 270, 530, 385 ]
+  task:
+    get_all: [ 1720, 155, 1860, 250 ]
+    weekly: [ 1152, 24, 1388, 80 ]
+  ship:
+    notification_button_1: [ 1760, 105, 1919, 170 ]
+    notification_button_2: [ 1760, 180, 1919, 248 ]
+    bottom_1: [ 329, 1025, 463, 1060 ]
+    bottom_2: [ 584, 1025, 720, 1060 ]
+    bottom_3: [ 839, 1025, 975, 1060 ]
+    bottom_4: [ 1094, 1025, 1229, 1060 ]
+    bottom_5: [ 1349, 1025, 1485, 1060 ]
+    dormitory_1: [ 1134, 473 ]
+    dormitory_2: [ 1258, 600 ]
+    dormitory_3: [ 1134, 700 ]
+    dormitory_4: [ 1258, 850 ]
+    change_scene:
+      clear_people: [ 760, 1015 ]
+      slot_1: [ 725, 300 ]
+      slot_2: [ 725, 725 ]
+      slot_3: [ 950, 300 ]
+      slot_4: [ 950, 725 ]
+      slot_5: [ 1150, 300 ]
+      now_emotion: [ 465, 145, 510, 185 ]
+      yes_btn: [ 1770, 1020 ]
+      skill_matrix:
+        bumper_y: 521
+        bumper_start_x: 620
+        anchor_delta: [ 4, -123 ]
+        dx_small: 63
+        dx: 216
+        dy: 421
+        size: 54
+    dormitory:
+      info_btn: [ 100, 225 ]
+      people_btn: [ 28, 351, 176, 482 ]
+      right_swipe_1: [ 1650, 800 ]
+      right_swipe_2: [ 1650, 200 ]
+    meeting_room: [ 1513, 312, 1840, 400 ]
+    enter_room_detail: [ 70, 1000 ]
+    meeting_room_in:
+      clue_total_count: [ 648, 979, 695, 1012 ]
+      new_daily_clue: [ 1740, 200, 1885, 330 ]
+      new_given_clue: [ 1740, 365, 1885, 485 ]
+      unlock_clue: [ 1023, 950, 1195, 1005 ]
+      clue_slot_red_point:
+        1: [ 664, 221 ]
+        2: [ 967, 326 ]
+        3: [ 1273, 189 ]
+        4: [ 1593, 255 ]
+        7: [ 744, 598 ]
+        5: [ 1088, 652 ]
+        6: [ 1397, 566 ]
+      red_point_to_slot_middle: [ -87, 121 ]
+      right_side_bar_first_clue: [ 1385, 315 ]
+      left_side_bar_first_clue: [ 109, 312 ]
+      new_daily_clue_take_button: [ 1120, 869 ]
+      give_out_clue_button: [ 1797, 585 ]
+      give_out_first_people_button: [ 1790, 200 ]
+      give_out_close_button: [ 1867, 53 ]
+      given_clue_get_all: [ 1607, 1029 ]
+    summary: [ 38, 135, 340, 224 ]
+    summary_scene:
+      ensure: [ 351, 518, 500, 555 ]
+      right_swipe_1: [ 1650, 800 ]
+      right_swipe_2: [ 1650, 500 ]
+      plus:
+        dy_to_anchor: -6
+        x_anchor: 648
+        ocr_rect_two_char_size: [ 75, 40 ]
+      room_matrix:
+        B004: [ 390, 310 ]
+        B005: [ 530, 310 ]
+        B101: [ 145, 340 ]
+        B102: [ 213, 340 ]
+        B103: [ 280, 340 ]
+        B104: [ 390, 340 ]
+        B105: [ 540, 340 ]
+        B201: [ 115, 370 ]
+        B202: [ 183, 370 ]
+        B203: [ 250, 370 ]
+        B204: [ 390, 370 ]
+        B205: [ 540, 370 ]
+        B301: [ 145, 400 ]
+        B302: [ 213, 400 ]
+        B303: [ 280, 400 ]
+        B304: [ 390, 400 ]
+        B305: [ 540, 400 ]
+        B404: [ 390, 430 ]
+    drone:
+      default:
+        step_0: [ 545, 720 ]
+        step_1: [ 93, 1015 ]
+        step_2: [ 1836, 811 ]
+        step_3: [ 1445, 505 ]
+        step_4: [ 1417, 875 ]
+        step_5: [ 1695, 965 ]
+      produce_exp:
+        step_0: [ 545, 720 ]
+        step_1: [ 93, 1015 ]
+        step_2: [ 1836, 811 ]
+        step_3: [ 1445, 505 ]
+        step_4: [ 1417, 875 ]
+        step_5: [ 1695, 965 ]
+      trade_gold:
+        step_0: [ 302, 478 ]
+        step_1: [ 602, 927 ]
+        step_2: [ 566, 740 ]
+        step_3: [ 1445, 505 ]
+        step_4: [ 1417, 875 ]
+        step_5: [ 1695, 965 ]
+

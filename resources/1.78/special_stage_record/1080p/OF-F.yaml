@@ -1,0 +1,70 @@
+hw_ratio: '1.78'
+width: 1920
+height: 1080
+mode: event
+event_list:
+- sendevent /dev/input/event5 3 57 1
+- sendevent /dev/input/event5 1 330 1
+- sendevent /dev/input/event5 3 53 837
+- sendevent /dev/input/event5 3 54 1005
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 4294967295
+- sendevent /dev/input/event5 1 330 0
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 1
+- sendevent /dev/input/event5 1 330 1
+- sendevent /dev/input/event5 3 53 175
+- sendevent /dev/input/event5 3 54 354
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 4294967295
+- sendevent /dev/input/event5 1 330 0
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 1
+- sendevent /dev/input/event5 1 330 1
+- sendevent /dev/input/event5 3 53 1671
+- sendevent /dev/input/event5 3 54 788
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 4294967295
+- sendevent /dev/input/event5 1 330 0
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 1
+- sendevent /dev/input/event5 1 330 1
+- sendevent /dev/input/event5 3 53 1672
+- sendevent /dev/input/event5 3 54 941
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 4294967295
+- sendevent /dev/input/event5 1 330 0
+- sendevent /dev/input/event5 0 0 0
+timestamp_list:
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.08092975616455078
+- 0.08092975616455078
+- 0.08092975616455078
+- 0.8915677070617676
+- 0.8915677070617676
+- 0.8915677070617676
+- 0.8915677070617676
+- 0.8915677070617676
+- 0.9623823165893555
+- 0.9623823165893555
+- 0.9623823165893555
+- 1.9444561004638672
+- 1.9444561004638672
+- 1.9444561004638672
+- 1.9444561004638672
+- 1.9444561004638672
+- 2.0355031490325928
+- 2.0355031490325928
+- 2.0355031490325928
+- 3.1894261837005615
+- 3.1894261837005615
+- 3.1894261837005615
+- 3.1894261837005615
+- 3.1894261837005615
+- 3.260240316390991
+- 3.260240316390991
+- 3.260240316390991

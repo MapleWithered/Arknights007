@@ -1,0 +1,104 @@
+hw_ratio: '1.78'
+width: 1920
+height: 1080
+mode: event
+event_list:
+- sendevent /dev/input/event5 3 47 1
+- sendevent /dev/input/event5 3 57 1
+- sendevent /dev/input/event5 1 330 1
+- sendevent /dev/input/event5 3 53 545
+- sendevent /dev/input/event5 3 54 725
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 4294967295
+- sendevent /dev/input/event5 1 330 0
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 1
+- sendevent /dev/input/event5 1 330 1
+- sendevent /dev/input/event5 3 53 362
+- sendevent /dev/input/event5 3 54 844
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 4294967295
+- sendevent /dev/input/event5 1 330 0
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 1
+- sendevent /dev/input/event5 1 330 1
+- sendevent /dev/input/event5 3 53 1847
+- sendevent /dev/input/event5 3 54 809
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 4294967295
+- sendevent /dev/input/event5 1 330 0
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 1
+- sendevent /dev/input/event5 1 330 1
+- sendevent /dev/input/event5 3 53 1433
+- sendevent /dev/input/event5 3 54 478
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 4294967295
+- sendevent /dev/input/event5 1 330 0
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 1
+- sendevent /dev/input/event5 1 330 1
+- sendevent /dev/input/event5 3 53 1434
+- sendevent /dev/input/event5 3 54 884
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 4294967295
+- sendevent /dev/input/event5 1 330 0
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 1
+- sendevent /dev/input/event5 1 330 1
+- sendevent /dev/input/event5 3 53 1736
+- sendevent /dev/input/event5 3 54 936
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 4294967295
+- sendevent /dev/input/event5 1 330 0
+- sendevent /dev/input/event5 0 0 0
+timestamp_list:
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0005002021789550781
+- 0.11059832572937012
+- 0.11059832572937012
+- 0.11059832572937012
+- 1.0726666450500488
+- 1.0726666450500488
+- 1.0726666450500488
+- 1.0726666450500488
+- 1.0726666450500488
+- 1.1627428531646729
+- 1.1627428531646729
+- 1.1627428531646729
+- 2.1367413997650146
+- 2.1367413997650146
+- 2.1367413997650146
+- 2.1367413997650146
+- 2.1367413997650146
+- 2.2177939414978027
+- 2.2177939414978027
+- 2.2177939414978027
+- 2.8902015686035156
+- 2.8902015686035156
+- 2.8902015686035156
+- 2.8902015686035156
+- 2.8902015686035156
+- 2.9702765941619873
+- 2.9702765941619873
+- 2.9702765941619873
+- 3.4107537269592285
+- 3.4107537269592285
+- 3.4107537269592285
+- 3.4107537269592285
+- 3.4107537269592285
+- 3.4708056449890137
+- 3.4708056449890137
+- 3.4708056449890137
+- 4.653872489929199
+- 4.653872489929199
+- 4.653872489929199
+- 4.653872489929199
+- 4.654372692108154
+- 4.734442949295044
+- 4.734442949295044
+- 4.734442949295044
