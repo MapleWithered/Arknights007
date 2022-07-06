@@ -4,6 +4,7 @@ use std::fmt::format;
 use eframe::egui;
 
 fn main() {
+    
     let options = eframe::NativeOptions::default();
     eframe::run_native(
         "My egui App",
@@ -13,7 +14,7 @@ fn main() {
 }
 
 struct MyApp {
-    name: String,
+    stage: String,
     age: u32,
     started: bool
 }
@@ -21,7 +22,7 @@ struct MyApp {
 impl Default for MyApp {
     fn default() -> Self {
         Self {
-            name: "Arthur".to_owned(),
+            stage: "Arthur".to_owned(),
             age: 42,
             started: false
         }
@@ -34,13 +35,13 @@ impl eframe::App for MyApp {
             ui.heading("Arknights007");
             ui.horizontal(|ui| {
                 ui.label("Your name: ");
-                ui.text_edit_singleline(&mut self.name);
+                ui.text_edit_singleline(&mut self.stage);
             });
             ui.add(egui::Slider::new(&mut self.age, 0..=120).text("age"));
             if ui.button("Click each year").clicked() {
                 self.age += 1;
             }
-            ui.label(format!("Hello '{}', age {}", self.name, self.age));
+            ui.label(format!("Hello '{}', age {}", self.stage, self.age));
             ui.add(toggle(&mut self.started));
 
             ui.horizontal(|ui| {
