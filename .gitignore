@@ -130,3 +130,5 @@ dmypy.json
 
 .idea/
 /arknights007/resources/game_data/~$skill_data.xlsx
+
+battle_screenshot/
