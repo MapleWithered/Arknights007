@@ -41,7 +41,7 @@
   Bskill_hire_spd2: 4
   Bskill_hire_spd4: 2
   Bskill_hire_spd5: 1
-  Bskill_man_cost_all: -1
+  Bskill_man_cost_all: 1
   Bskill_man_exp&cost: 100
   Bskill_man_exp&limit1: 100
   Bskill_man_exp&limit2: 100
