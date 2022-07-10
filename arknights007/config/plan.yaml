@@ -1,29 +1,33 @@
 refill_with_item: false
 plan:
 - stages:
-  - DV-6: 25
+  - DV-6: 15
+    //: ' '
+    sanity: 21
+    remain: 2
+  - DV-7: 20
     //: ' '
     sanity: 21
     remain: 3
+  - DV-8: 30
+    //: ' '
+    sanity: 21
+    remain: 5
 - stages:
-  - DV-6: 100
+  - DV-6: 20
     //: ' '
     sanity: 21
-    remain: 100
-  - DV-7: 100
+    remain: 20
+  - DV-7: 20
     //: ' '
     sanity: 21
-    remain: 100
-  - DV-8: 100
+    remain: 20
+  - DV-8: 20
     //: ' '
     sanity: 21
-    remain: 100
+    remain: 20
 - planner:  # 泥岩2技能专三
-  - 技能书3合成: 35
-  - 晶体电路: 4
-  - 凝胶: 3
-  - 聚合凝胶: 4
-  - 提纯源岩: 10
+  - 技能书3合成: 15
   - 聚合剂: 6
   - 炽合金块: 6
 - planner:  # 每日轮换材料储备
