@@ -48,6 +48,11 @@
       daily_credit_btn: [ 1450, 40, 1610, 80 ]
       credit_remain: [ 1715, 35, 1810, 80 ]
       confirm_order: [ 1380, 870 ]
+  friends:
+    left_side_rect: [ 30, 275, 325, 390 ]
+    first_friend: [ 1495, 240 ]
+    next_friend_btn: [ 1750, 985, 1915, 1000 ]
+    credit_remain: [ 1815, 35, 1910, 80 ]
   reward_scene:
     reco_template: [ 878, 55, 1058, 205 ]
     tick_button: [ 915, 915, 1000, 1000 ]
