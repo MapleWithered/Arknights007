@@ -14,6 +14,7 @@
     task_number: [ 1285, 800, 1378, 895 ]
     sanity_remain: [ 1140, 195, 1335, 338 ]
     ship_info: [ 1588, 837, 1725, 975 ]
+    shop_corner_notification: [ 1365, 626, 1396, 657 ]
   terminal:
     terminal_template: [ 75, 950, 155, 1030 ]
     main_story: [ 355, 1000 ]
@@ -30,10 +31,8 @@
     nav_main: [ 97, 228, 175, 451 ]
     nav_terminal: [ 751, 74, 832, 320 ]
     nav_public_recruit: [ 1351, 337, 1516, 462 ]
-  dialog:
-
   public_recruit:
-    flag: [1255, 106, 1288, 147]
+    flag: [ 1255, 106, 1288, 147 ]
   main_story:
     act_now: [ 96, 352 ]
     act_up: [ 96, 200 ]
@@ -42,6 +41,13 @@
     episode_left: [ 932, 558 ]
     episode_right: [ 1910, 560 ]
     ocr_episode_id: [ 497, 435, 531, 467 ]
+  shopping_center:
+    bar:
+      credit_shop: [ 1652, 133, 1711, 191 ]
+    credit_shop:
+      daily_credit_btn: [ 1450, 40, 1610, 80 ]
+      credit_remain: [ 1715, 35, 1810, 80 ]
+      confirm_order: [ 1380, 870 ]
   reward_scene:
     reco_template: [ 878, 55, 1058, 205 ]
     tick_button: [ 915, 915, 1000, 1000 ]

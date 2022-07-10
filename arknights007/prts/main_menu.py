@@ -60,5 +60,17 @@ def main_check_ship_remain():
         return False
 
 
+def main_check_shop_remain():
+    img = ADB.screencap_mat(gray=False, std_size=True)
+    img = imgops.mat_pick_color_rgb(img, Color(255, 104, 1))
+    corner_rect = res.navigator.get_pos("/main_menu/shop_corner_notification")
+    img_cropped = imgops.mat_crop(img, Rect(*corner_rect))
+    img_cropped = imgops.mat_bgr2gray(img_cropped)
+    if np.sum(img_cropped) > 7000:
+        return True
+    else:
+        return False
+
+
 if __name__ == '__main__':
-    main_check_ship_remain()
+    main_check_shop_remain()
