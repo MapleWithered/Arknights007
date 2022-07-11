@@ -29,16 +29,18 @@ OCRSingleResult = namedtuple("OCRSingleResult", ['str', 'val'])
 OCRSTDSingleResult = namedtuple("OCRSTDSingleResult", ['str', 'rect', 'val'])
 
 
-def press_std_pos(path):
+def press_std_pos(path, sleep=True):
     pos = Pos(*imgops.from_std_pos(ADB.get_resolution(), Pos(*res_nav.get_pos(path))))
     ADB.input_press_pos(imgops.from_std_pos(ADB.get_resolution(), pos))
-    time.sleep(1)
+    if sleep:
+        time.sleep(1)
 
 
-def press_std_rect(path):
+def press_std_rect(path, sleep=True):
     pos_rect = Rect(*imgops.from_std_rect(ADB.get_resolution(), Rect(*res_nav.get_pos(path))))
     ADB.input_press_rect(imgops.from_std_rect(ADB.get_resolution(), pos_rect))
-    time.sleep(1)
+    if sleep:
+        time.sleep(1)
 
 
 def swipe_std_pos(path_start, path_end, duration_ms):

@@ -4,28 +4,28 @@ plan:
   - DV-6: 15
     //: ' '
     sanity: 21
-    remain: 2
+    remain: 0
   - DV-7: 20
     //: ' '
     sanity: 21
-    remain: 3
+    remain: 0
   - DV-8: 30
     //: ' '
     sanity: 21
-    remain: 5
+    remain: 0
 - stages:
   - DV-6: 20
     //: ' '
     sanity: 21
-    remain: 20
+    remain: 18
   - DV-7: 20
     //: ' '
     sanity: 21
-    remain: 20
+    remain: 18
   - DV-8: 20
     //: ' '
     sanity: 21
-    remain: 20
+    remain: 18
 - planner:  # 泥岩2技能专三
   - 技能书3合成: 15
   - 聚合剂: 6

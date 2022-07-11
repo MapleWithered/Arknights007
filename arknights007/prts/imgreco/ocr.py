@@ -113,7 +113,14 @@ def ocr_rect_single_line(img_mat=None, rect: Rect = None, ocr_dict=None, debug_s
             rect = Rect(x1, y1, x2, y2)
         img_cropped = imgops.mat_crop(img_mat, rect)
     else:
-        img_cropped = img_mat.copy()
+        if bigger_box == 0:
+            img_cropped = img_mat.copy()
+        elif bigger_box > 0:
+            img_cropped = cv2.copyMakeBorder(img_mat,
+                                             bigger_box, bigger_box, bigger_box, bigger_box,
+                                             cv2.BORDER_REPLICATE)
+        else:
+            img_cropped = imgops.mat_crop(img_mat, Rect(-bigger_box, -bigger_box, img_mat.shape[1] + bigger_box, img_mat.shape[0] + bigger_box))
     if debug_show:
         plt.imshow(img_cropped)
         plt.show()

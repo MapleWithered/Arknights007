@@ -1,37 +1,32 @@
 import time
 
-from prts import battle, navigator, ship, task
+from prts.planner import load_inventory, run_plan, print_plan_with_plan
 
-def run_stage(stage: str):
-    while True:
-        try:
-            navigator.goto_stage(stage)
-            res = battle.start_battle(stage)
-            break
-        except RuntimeError:
-            return False
-    return res
-
-
-def battle_forever(stage):
-    counter = 0
-    while True:
-        res = run_stage(stage)
-        if not res:
-            time.sleep(180)
-        else:
-            counter += 1
-            print(counter, "Succeeded.")
-
+from prts.resource.navigator import get_stage_info_and_map, get_stage_sanity_cost
+from prts.navigator import back_to_main_menu, is_main_menu
+from prts.ship import run_ship, handle_drone
+from prts.task import run_task
+from prts.friend import run_friend
+from prts.public_recruit import run_public_recruit
+from prts.shopping_center import run_credit_store
+from prts.main_menu import main_menu_reco_sanity
+import datetime
 
 if __name__ == '__main__':
-    counter = 0
+    next_round_sanity = 0
+    back_to_main_menu()
+    time_target = 0
     while True:
-        res = run_stage("PR-C-2")
-        if not res:
-            ship.run_ship()
-            task.run_task()
-            time.sleep(3600)
-        else:
-            counter += 1
-            print(counter, "Succeeded.")
+        while time.time() < time_target:
+            time.sleep(5)
+        next_round_sanity = run_plan()
+        time_target = time.time() + (next_round_sanity - main_menu_reco_sanity(force=True)) * 360
+        # print time.time()+time_sleep as HH:MM
+        print("\n"*20)
+        print_plan_with_plan()
+        print(f"将在{datetime.datetime.fromtimestamp(time_target).strftime('%H:%M')}继续刷图")
+        run_ship()
+        run_friend()
+        run_credit_store()
+        run_public_recruit()
+        run_task()

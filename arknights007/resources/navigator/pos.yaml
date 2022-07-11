@@ -32,7 +32,17 @@
     nav_terminal: [ 751, 74, 832, 320 ]
     nav_public_recruit: [ 1351, 337, 1516, 462 ]
   public_recruit:
-    flag: [ 1255, 106, 1288, 147 ]
+    flag: [ 910, 167, 1055, 177 ]
+    refresh_remain_num: [ 1391, 108, 1414, 142 ]
+    labels_menu_yes_rect: [ 1340, 835, 1431, 905 ]
+    buttons:
+      yes: [1465, 875]
+      no: [1467, 968]
+      refresh: [1453, 611]
+      refresh_confirm: [1265, 746]
+      hour_up: [679, 220]
+      minute_up: [925, 220]
+      skip: [1834, 62]
   main_story:
     act_now: [ 96, 352 ]
     act_up: [ 96, 200 ]
@@ -70,6 +80,7 @@
     team_start: [ 1561, 686, 1742, 897 ]
   battle:
     finished: [ 85, 270, 530, 385 ]
+    level_up_text: [434, 522, 710, 610]
   task:
     get_all: [ 1720, 155, 1860, 250 ]
     weekly: [ 1152, 24, 1388, 80 ]
