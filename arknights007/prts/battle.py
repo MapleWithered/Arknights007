@@ -160,12 +160,27 @@ def is_finished(screenshot_gray=None):
     cropped = imgops.mat_pick_grey(cropped, 230, 30)
     if not os.path.exists(res_img.get_img_path(template_shortpath)):
         cv2.imwrite(res_img.get_img_path(template_shortpath), cropped)
-    gear_template = res_img.get_img_gray(template_shortpath)
+    mat_template = res_img.get_img_gray(template_shortpath)
 
-    if template.compare_mat(cropped, gear_template) > 0.9:
-        return 1
-    else:
-        return 0
+    if template.compare_mat(cropped, mat_template) > 0.9:
+        return 1        # 关卡正常结束
+
+    template_shortpath = "/battle/level_up_text.png"
+    pos_rect = res_nav.get_pos("/battle/level_up_text")
+    cropped = imgops.mat_crop(img_gray, imgops.from_std_rect(ADB.get_resolution(), Rect(*pos_rect)))
+    cropped = imgops.mat_pick_grey(cropped, 255, 10)
+    if not os.path.exists(res_img.get_img_path(template_shortpath)):
+        cv2.imwrite(res_img.get_img_path(template_shortpath), cropped)
+    mat_template = res_img.get_img_gray(template_shortpath)
+    if template.compare_mat(cropped, mat_template) > 0.9:
+        time.sleep(4)
+        navigator.press_std_rect("/battle/finished")
+        time.sleep(1)
+        print("等级提升！")
+        return 2        # 等级提升后结束
+
+    return 0
+
 
 
 def start_battle(ensure_stage_code: str = ''):
