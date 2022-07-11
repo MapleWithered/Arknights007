@@ -17,15 +17,15 @@ plan:
   - DV-6: 20
     //: ' '
     sanity: 21
-    remain: 18
+    remain: 16
   - DV-7: 20
     //: ' '
     sanity: 21
-    remain: 18
+    remain: 16
   - DV-8: 20
     //: ' '
     sanity: 21
-    remain: 18
+    remain: 17
 - planner:  # 泥岩2技能专三
   - 技能书3合成: 15
   - 聚合剂: 6

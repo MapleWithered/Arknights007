@@ -16,6 +16,7 @@ from .adb import ADB
 from .imgreco import imgops
 from .imgreco import ocr
 from .imgreco import template
+from .resource.image import get_img_path
 
 Size = namedtuple("Size", ['width', 'height'])
 Pos = namedtuple("Pos", ['x', 'y'])
@@ -563,17 +564,21 @@ def record_new(path: str, start_from_terminal=True):
 
 
 def record_play(path, no_delay=False):
-    with open(path, 'r', encoding='utf-8') as f:
-        record_data = yaml.load(f.read(), Loader=yaml.RoundTripLoader)
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            record_data = yaml.load(f.read(), Loader=yaml.RoundTripLoader)
 
-    for i in range(len(record_data['event_list']))[:-1]:
-        cmd = record_data['event_list'][i]
+        for i in range(len(record_data['event_list']))[:-1]:
+            cmd = record_data['event_list'][i]
+            ADB.get_device_object().shell(cmd)
+            time.sleep(record_data['timestamp_list'][i + 1] - record_data['timestamp_list'][i])
+        cmd = record_data['event_list'][len(record_data['event_list']) - 1]
         ADB.get_device_object().shell(cmd)
-        time.sleep(record_data['timestamp_list'][i + 1] - record_data['timestamp_list'][i])
-    cmd = record_data['event_list'][len(record_data['event_list']) - 1]
-    ADB.get_device_object().shell(cmd)
-    if not no_delay:
-        time.sleep(3)
+        if not no_delay:
+            time.sleep(3)
+    except KeyboardInterrupt:
+        record_play(get_img_path('/common_record/release.yaml'), no_delay=True)
+        raise KeyboardInterrupt
 
 
 def goto_special_stage(stage: str, allow_new_record=True):

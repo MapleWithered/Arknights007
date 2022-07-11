@@ -1,0 +1,12 @@
+hw_ratio: '1.78'
+width: 1920
+height: 1080
+mode: event
+event_list:
+- sendevent /dev/input/event5 3 57 4294967295
+- sendevent /dev/input/event5 1 330 0
+- sendevent /dev/input/event5 0 0 0
+timestamp_list:
+- 0.0
+- 0.0
+- 0.0
