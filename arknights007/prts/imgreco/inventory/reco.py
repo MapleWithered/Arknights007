@@ -77,9 +77,9 @@ def get_all_item_img_in_screen(cv_screen, debug_show=False):
         if center_y < min_y:
             min_y = center_y
 
-    x_sum = 0
-    y_sum = 0
-    r_sum = 0
+    x_sum_list = []
+    y_sum_list = []
+    r_sum_list = []
 
     pixel_x_between_center = pixel_x_between_center_720p * ratio
     pixel_y_between_center = pixel_y_between_center_720p * ratio
@@ -87,13 +87,17 @@ def get_all_item_img_in_screen(cv_screen, debug_show=False):
     for center_x, center_y, r in circles:
         x_n = round((center_x - min_x) / pixel_x_between_center)
         y_n = round((center_y - min_y) / pixel_y_between_center)
-        x_sum += center_x - x_n * pixel_x_between_center
-        y_sum += center_y - y_n * pixel_y_between_center
-        r_sum += r
+        x_sum_list.append(center_x - x_n * pixel_x_between_center)
+        y_sum_list.append(center_y - y_n * pixel_y_between_center)
+        r_sum_list.append(r)
 
-    x_lu_avg = round(x_sum / len(circles))
-    y_lu_avg = round(y_sum / len(circles))
-    r_avg = round(r_sum / len(circles))
+    # x_lu_avg = round(x_sum / len(circles))
+    # y_lu_avg = round(y_sum / len(circles))
+    # r_avg = round(r_sum / len(circles))
+
+    x_lu_avg = np.median(x_sum_list)
+    y_lu_avg = np.median(y_sum_list)
+    r_avg = np.median(r_sum_list)
 
     for i in range(len(circles)):
         circles[i][0] = round(
@@ -190,7 +194,7 @@ def get_quantity_ocr(ori_img, debug_show=False):
     gray_img = cv2.cvtColor(ori_img, cv2.COLOR_BGR2GRAY)
 
     # 二值化
-    half_img = gray_img[t:b, l:r]
+    half_img = gray_img[t:b, l:r].copy()
     half_img[half_img < 173] = 0
 
     # 裁剪数字区
@@ -261,7 +265,10 @@ def get_inventory_items_all_information(show_item_name=False, debug_show=False):
     while True:
         navigator.record_play(get_img_path('/common_record/swipe_left_with_break.yaml'), no_delay=True)
 
-        screen_items = {item['itemId']: item for item in get_all_item_details_in_screen()}
+        try:
+            screen_items = {item['itemId']: item for item in get_all_item_details_in_screen()}
+        except Exception:
+            screen_items = {item['itemId']: item for item in get_all_item_details_in_screen()}
 
         if len(set(screen_items) - set(items)) == 0:
             break
