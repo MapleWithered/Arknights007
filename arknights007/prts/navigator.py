@@ -255,7 +255,7 @@ def back_to_main_menu():
             continue
         else:
             error_counter += 1
-            time.sleep(1)
+            time.sleep(5)
             if error_counter == 60:
                 raise RuntimeError("Unhandled scene.")
 
