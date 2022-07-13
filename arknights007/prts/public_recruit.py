@@ -313,8 +313,14 @@ def reco_ticket_remain():
     box_x1 = bumper_x
     box_y1 = 37
 
-    while np.any(screen_darkgray[bumper_y, bumper_x] != np.array([0, 0, 0])):
+    bumper_count = 0
+    while bumper_count < 10:
         bumper_x += 1
+        if np.any(screen_darkgray[bumper_y, bumper_x] != np.array([0, 0, 0])):
+            bumper_count = 0
+        else:
+            bumper_count += 1
+    bumper_x -= 10
 
     box_x2 = bumper_x
     box_y2 = 80
