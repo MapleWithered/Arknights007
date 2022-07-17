@@ -1,19 +1,6 @@
 refill_with_item: false
 plan:
 - stages:
-  - DV-6: 15
-    //: ' '
-    sanity: 21
-    remain: 0
-  - DV-7: 20
-    //: ' '
-    sanity: 21
-    remain: 0
-  - DV-8: 30
-    //: ' '
-    sanity: 21
-    remain: 0
-- stages:
   - DV-6: 20
     //: ' '
     sanity: 21
@@ -21,15 +8,11 @@ plan:
   - DV-7: 20
     //: ' '
     sanity: 21
-    remain: 6
+    remain: 7
   - DV-8: 20
     //: ' '
     sanity: 21
     remain: 7
-- planner:  # 泥岩2技能专三
-  - 技能书3合成: 15
-  - 聚合剂: 6
-  - 炽合金块: 6
 - planner:  # 每日轮换材料储备
   - 净龙门币: 210000
   - 采购凭证: 360
@@ -54,7 +37,6 @@ plan:
   - 技能书1: 30
 - blue_item:
 # TODO:
-# - 泥岩 2专三
 # - 风笛 3专三
 # - 凯尔希 2专三
 # - 铃兰 3专三
