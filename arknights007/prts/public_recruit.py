@@ -287,7 +287,7 @@ def gen_matrix_with_labels(labels):
             for label in labels:
                 if label['text'] == '支援机械':
                     robot_label=label
-    return tags2char, tags2lowest_rarity, max_rarity, max_rarity_labels, robot_label
+    return tags2char_new, tags2lowest_rarity, max_rarity, max_rarity_labels, robot_label
 
 
 def reco_ticket_remain():
@@ -400,7 +400,7 @@ def run_public_recruit():
 
         if max_rarity >= 5:     # 有五六星保底组合
             print(f"公招有{max_rarity}星保底组合！")
-            print(f"Slot: {empty_slots[0]}")
+            print(f"Slot: {empty_slots[0]+1}")
             for tags in tags2char:
                 if tags2lowest_rarity[tags] >= 5:
                     print(f"{tags} ({tags2lowest_rarity[tags]}★) : {tags2char[tags]}")
