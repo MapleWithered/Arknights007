@@ -1,18 +1,5 @@
 refill_with_item: false
 plan:
-- stages:
-  - DV-6: 20
-    //: ' '
-    sanity: 21
-    remain: 6
-  - DV-7: 20
-    //: ' '
-    sanity: 21
-    remain: 7
-  - DV-8: 20
-    //: ' '
-    sanity: 21
-    remain: 7
 - planner:  # 每日轮换材料储备
   - 净龙门币: 210000
   - 采购凭证: 360
@@ -41,3 +28,20 @@ plan:
 # - 凯尔希 2专三
 # - 铃兰 3专三
 # - 风笛 2专三
+
+
+
+
+#- stages:
+#  - DV-6: 20
+#    //: ' '
+#    sanity: 21
+#    remain: 1
+#  - DV-7: 20
+#    //: ' '
+#    sanity: 21
+#    remain: 1
+#  - DV-8: 20
+#    //: ' '
+#    sanity: 21
+#    remain: 2
