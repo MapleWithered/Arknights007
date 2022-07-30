@@ -91,9 +91,9 @@ def uniform_size(mat1, mat2):
     if mat1.size[0] < mat2.size[0]:
         return mat1, cv2.resize(mat2, mat1.size, cv2.INTER_LINEAR)
     elif mat1.size[0] > mat2.size[0]:
-        return cv2.resize(mat1, mat1.size, cv2.INTER_LINEAR), mat2
+        return cv2.resize(mat1, mat2.size, cv2.INTER_LINEAR), mat2
     elif mat1.size[1] != mat2.size[1]:
-        return cv2.resize(mat1, mat1.size, cv2.INTER_LINEAR), mat2
+        return cv2.resize(mat1, mat2.size, cv2.INTER_LINEAR), mat2
     else:
         return mat1, mat2
 
