@@ -14,6 +14,7 @@ from prts.friend import run_friend
 from prts.public_recruit import run_public_recruit
 from prts.shopping_center import run_credit_store
 from prts.main_menu import main_menu_reco_sanity
+from prts.logger import log
 import datetime
 
 
@@ -27,9 +28,9 @@ def run_all():
         next_round_sanity = run_plan()
         time_target = time.time() + (next_round_sanity - main_menu_reco_sanity(force=True)) * 360
         # print time.time()+time_sleep as HH:MM
-        print("\n" * 20)
+        log("\n" * 20)
         print_plan_with_plan()
-        print(f"将在{datetime.datetime.fromtimestamp(time_target).strftime('%H:%M')}继续刷图")
+        log(f"将在{datetime.datetime.fromtimestamp(time_target).strftime('%H:%M')}继续刷图")
         run_ship()
         run_friend()
         run_credit_store()

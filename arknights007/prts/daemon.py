@@ -2,7 +2,7 @@ from typing import Optional
 from enum import Enum
 from multiprocessing import Process
 
-from ..prts.runner import *
+from .runner import *
 
 
 class Status(Enum):
@@ -13,6 +13,7 @@ class Status(Enum):
     RUN_CREDIT_STORE = 5
     RUN_PUB_RECRUIT = 6
     RUN_TASK = 7
+    RUN_ALL = 888
 
 
 status_code: int = 0
@@ -112,4 +113,14 @@ class PRTSDaemon:
 
         return 0
 
+    @classmethod
+    def run_all(cls) -> int:        # Temp
 
+        if cls.get_status() != Status.IDLE:
+            return -1
+
+        cls._status_code = Status.RUN_ALL
+        cls._prts_process = Process(target=run_all)
+        cls._prts_process.start()
+
+        return 0

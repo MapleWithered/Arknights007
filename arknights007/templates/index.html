@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.bootcss.com/jquery/3.2.0/jquery.js"></script>
+    <script src="https://cdn.socket.io/socket.io-3.0.5.js"></script>
+    <style>
+
+        html, body {
+            height: 80%;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+
+
+{##}
+{#<form id="emit">#}
+{#    <label for="emit_data">Emit message</label>#}
+{#    <input type="text" id="emit_data">#}
+{#    <input type="submit" id="emit" value="aaa">#}
+{#</form>#}
+{##}
+{#<form id="broadcast">#}
+{#    <label for="broadcast_data">Broadcast message</label>#}
+{#    <input type="text" id="broadcast_data">#}
+{#    <input type="submit" id="broadcast" value="bbb">#}
+{#</form>#}
+
+<form id="form_tasks">
+    <p>功能（改动将在下一次启动时生效）</p>
+    <input type="checkbox" id="form_task_plan" value="0"><label for="form_task_plan">刷图</label>
+    <input type="checkbox" id="form_task_ship" value="1"><label for="form_task_ship">基建</label>
+    <input type="checkbox" id="form_task_friend" value="2"><label for="form_task_friend">好友</label>
+    <input type="checkbox" id="form_task_credit" value="3"><label for="form_task_credit">信用</label>
+    <input type="checkbox" id="form_task_pub_recruit" value="4"><label for="form_task_pub_recruit">公招</label>
+    <input type="checkbox" id="form_task_task" value="5"><label for="form_task_task">任务</label>
+</form>
+
+<label class="switch">
+    <input type="checkbox" id="run_checkbox">
+    <span class="slider round"></span>
+</label>
+
+<p>运行日志：</p>
+<div id="log" style="height: 80%; overflow-y: scroll;">
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Connect / Disconnect
+        var socket = io.connect('http://' + document.domain + ':' + location.port + '/socket');
+
+        // Log
+        socket.on('log', function (msg) {
+            $("#log").append('<p>' + msg + '</p>');
+
+            var element = document.getElementById("log");
+            element.scrollTop = element.scrollHeight;
+        });
+
+        // UI Update - Update_all
+        socket.on('ui_update/update_sys_state', function (ui_state) {
+            $('#run_checkbox').prop('checked', ui_state.run);
+            $('#form_task_plan').prop('checked', ui_state.task[0])
+            $('#form_task_ship').prop('checked', ui_state.task[1])
+            $('#form_task_friend').prop('checked', ui_state.task[2])
+            $('#form_task_credit').prop('checked', ui_state.task[3])
+            $('#form_task_pub_recruit').prop('checked', ui_state.task[4])
+            $('#form_task_task').prop('checked', ui_state.task[5])
+        });
+
+        // UI update - Post
+        $('#run_checkbox').on('change', function () {
+            if ($(this).is(':checked')) {
+                socket.emit('ui_update/run', {state: true});
+            } else {
+                socket.emit('ui_update/run', {state: false});
+            }
+        });
+        $('#form_task_plan').on('change', function () {
+            socket.emit('ui_update/tasks', {id: 0, state: $(this).is(':checked')});
+        });
+        $('#form_task_ship').on('change', function () {
+            socket.emit('ui_update/tasks', {id: 1, state: $(this).is(':checked')});
+        });
+        $('#form_task_friend').on('change', function () {
+            socket.emit('ui_update/tasks', {id: 2, state: $(this).is(':checked')});
+        });
+        $('#form_task_credit').on('change', function () {
+            socket.emit('ui_update/tasks', {id: 3, state: $(this).is(':checked')});
+        });
+        $('#form_task_pub_recruit').on('change', function () {
+            socket.emit('ui_update/tasks', {id: 4, state: $(this).is(':checked')});
+        });
+        $('#form_task_task').on('change', function () {
+            socket.emit('ui_update/tasks', {id: 5, state: $(this).is(':checked')});
+        });
+
+        $('form#emit').submit(function (event) {
+            socket.emit('my event', {data: $('#emit_data').val()});
+            return false;
+        });
+
+        $('form#broadcast').submit(function (event) {
+            socket.emit('my broadcast event', {data: $('#broadcast_data').val()});
+            return false;
+        });
+    });
+</script>
+
+</body>
+
+</html>

@@ -199,11 +199,11 @@ def create_plan_by_non_material(wish_list, my_inventory=None):
             lmb_need = max(lmb_need, 0, item_need[1] - owned.get('net_lmb', owned.get('龙门币', 0) - owned.get('total_exp',
                                                                                                             calc_experience(
                                                                                                                 my_inventory))))
-        elif item_need[0] in {'作战记录', '经验', '狗粮', '经验本', '录像带', '狗粮本', '经验卡', '经验书', '录像'}:
-            count = max(0, ceil((item_need[1] - owned.get('total_exp', 0)) / 10000))
-            if count != 0:
-                stage_task_list.append({'stage': 'LS-6', 'count': count, 'cost': 36})
-                sanity += count * 36
+        # elif item_need[0] in {'作战记录', '经验', '狗粮', '经验本', '录像带', '狗粮本', '经验卡', '经验书', '录像'}:
+        #     count = max(0, ceil((item_need[1] - owned.get('total_exp', 0)) / 10000))
+        #     if count != 0:
+        #         stage_task_list.append({'stage': 'LS-6', 'count': count, 'cost': 36})
+        #         sanity += count * 36      # TODO: 加一个经验书是否刷的开关
         elif item_need[0] in {'采购凭证', '红票'}:
             count = max(0, ceil((item_need[1] - owned.get('采购凭证', 0)) / 20))
             if count != 0:
@@ -407,7 +407,7 @@ def get_min_blue_item_stage(item_excluded=None, stage_unavailable=None, my_items
                         stage_todo = stage[0]
                         logger.info('蓝材料: ' + list_my_blue_item[i]['name'] +
                                     ', 当前数量: ' + str(list_my_blue_item[i]['count']) +
-                                    ', 关卡: ' + stage_todo,
+                                    ', 关卡: ' + stage_todo +
                                     ', 效率: ' + str(stage[1]))
                         return stage_todo
         i += 1

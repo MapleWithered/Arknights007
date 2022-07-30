@@ -31,9 +31,9 @@ OCRSTDSingleResult = namedtuple("OCRSTDSingleResult", ['str', 'rect', 'val'])
 
 def main_to_credit_shop():
     navigator.press_std_rect("/main_menu/shopping_center")
-    time.sleep(.7)
+    time.sleep(1.5)
     navigator.press_std_rect("/shopping_center/bar/credit_shop")
-    time.sleep(1)
+    time.sleep(1.5)
     assert is_in_credit_shop()
 
 

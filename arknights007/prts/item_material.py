@@ -45,7 +45,7 @@ def item_id_to_name(id):
 
 @lru_cache()
 def item_name_to_id(name):
-    special_support = {'净龙门币': 'net_lmb', '总作战记录': 'total_exp'}
+    special_support = {'净龙门币': 'net_lmb', '总作战记录': 'total_exp', '经验书': 'total_exp', '经验本': 'total_exp'}
     if name in special_support:
         return special_support[name]
 

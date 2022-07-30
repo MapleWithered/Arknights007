@@ -10,3 +10,9 @@ numpy           # cv总归要numpy的
 matplotlib      # debug的时候可以看图用
 requests        # 下载一些东西
 click           # pipe_runner的命令行解析
+flask           # http api 服务器
+flask_socketio  # 运行状态 socketio 服务器
+gevent          # WSGI http 服务器支持
+gevent-websocket # WSGI websocket 服务器支持
+python-socketio # socketio 客户端
+"python-socketio[client]"
