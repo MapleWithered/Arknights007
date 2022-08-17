@@ -32,7 +32,7 @@ OCRSTDSingleResult = namedtuple("OCRSTDSingleResult", ['str', 'rect', 'val'])
 
 def is_in_friend_list():
     img = ADB.screencap_mat(gray=False, std_size=True)
-    img = imgops.mat_pick_color_rgb(img, Color(215, 215, 215), tolerance=8)
+    img = imgops.mat_pick_color_rgb(img, Color(215, 215, 215), tolerance=11)
     btn_rect = resource.navigator.get_pos("/friends/left_side_rect")
     img_cropped = imgops.mat_crop(img, Rect(*btn_rect))
     img_cropped = imgops.mat_bgr2gray(img_cropped)
