@@ -7,7 +7,7 @@ import cv2
 
 from . import resource_path
 from .online import download_from_multiple_servers
-from ..logger import log, log_v
+from ..prts_web_client import log, log_v
 
 
 def _get_inv_reco_data_path(filename: typing.Optional[str] = None) -> str:

@@ -17,6 +17,7 @@ from .imgreco import ocr
 from .imgreco.inventory import reco as inventory_reco
 from . import navigator
 from .resource.inventory_reco import get_net_data
+from . import shopping_center
 
 Size = namedtuple("Size", ['width', 'height'])
 Pos = namedtuple("Pos", ['x', 'y'])
@@ -81,10 +82,10 @@ def get_today_fuse():
     fuse_path = resource.get_resource_path('friend/fuse.yaml')
 
     if not os.path.exists(fuse_path):
-        fuse = {'status': False, 'timestamp': time.time()}
+        fuse = {'count': 0, 'timestamp': time.time()}
         with open(fuse_path, 'w', encoding='utf-8') as f:
             yaml.dump(fuse, f, Dumper=yaml.RoundTripDumper, indent=2, allow_unicode=True, encoding='utf-8')
-        return False
+        return 0
 
     with open(fuse_path, 'r', encoding='utf-8') as f:
         fuse = yaml.load(f, Loader=yaml.RoundTripLoader)
@@ -94,39 +95,54 @@ def get_today_fuse():
         prev_update_time = prev_update_time - 24 * 60 * 60
 
     if fuse.get('timestamp', 0) < prev_update_time:
-        fuse['status'] = False
+        fuse['count'] = 0
         fuse['timestamp'] = time.time()
         with open(fuse_path, 'w', encoding='utf-8') as f:
             yaml.dump(fuse, f, Dumper=yaml.RoundTripDumper, indent=2, allow_unicode=True, encoding='utf-8')
-        return False
+        return 0
 
-    return fuse.get('status', False)
+    return fuse.get('count', 0)
 
 
-def fuse_up():
+def fuse_up(already_full=False):
     fuse_path = resource.get_resource_path('friend/fuse.yaml')
-    fuse = {'status': True, 'timestamp': time.time()}
+    if already_full:
+        fuse = {'count': 10, 'timestamp': time.time()}
+    else:
+        fuse = {'count': get_today_fuse() + 1, 'timestamp': time.time()}
     with open(fuse_path, 'w', encoding='utf-8') as f:
         yaml.dump(fuse, f, Dumper=yaml.RoundTripDumper, indent=2, allow_unicode=True, encoding='utf-8')
 
 
 def run_friend():
-    if get_today_fuse():
+    if get_today_fuse() >= 10:
         return
+    navigator.back_to_main_menu()
+    shopping_center.main_to_credit_shop()
+    last_credit = shopping_center.reco_credit_remain()
     navigator.back_to_main_menu()
     main_to_friend_list()
     navigator.press_std_pos("/friends/first_friend")
-    time.sleep(5)
-    credit = reco_friend_credit()
-    last_credit = credit - 30
+    first_friend = True
     while True:
-        if not exist_more_friend_to_visit():
-            break
+
+        time.sleep(5)
+
         credit = reco_friend_credit()
         if credit == last_credit:   # 达到访问次数限制
+            if not first_friend:
+                fuse_up(already_full=True)
+                break
+        else:
             fuse_up()
-            break
         last_credit = credit
+
+        if first_friend:
+            first_friend = False
+
+        if not exist_more_friend_to_visit() or get_today_fuse() >= 10:
+            break
+
         navigator.press_std_rect("/friends/next_friend_btn")
-        time.sleep(5)
+
     navigator.back_to_main_menu()

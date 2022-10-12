@@ -7,7 +7,7 @@ from threading import Thread
 
 
 # noinspection PyBroadException
-from ..logger import log_v
+from ..prts_web_client import log_v
 
 
 def download_url_to_bytes(url: str) -> typing.Optional[bytes]:

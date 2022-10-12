@@ -4,7 +4,7 @@ import typing
 
 from . import resource_path
 from .online import download_from_multiple_servers
-from ..logger import log, log_v
+from ..prts_web_client import log, log_v
 
 
 def _download_game_data_from_all_server(filename: str) -> bytes:

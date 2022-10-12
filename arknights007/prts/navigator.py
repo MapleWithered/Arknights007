@@ -368,7 +368,7 @@ def nav_terminal_to_resource():
 
 
 def nav_main_story_choose_act(stage):
-    act_table = [0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2]
+    act_table = [0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2]
     target_act = act_table[stage_is_main_chapter(stage)]
     now_act = act_table[ocr.ocr_main_story_episode()]
     while now_act != target_act:
@@ -417,7 +417,7 @@ def nav_resource_choose_category(stage: str):
     rect = result.rect
     val = result.val
 
-    if val < 0.1:
+    if val < 0.04:
         ADB.input_press_rect(imgops.from_std_rect(ADB.get_resolution(), rect))
         time.sleep(1)
         return True

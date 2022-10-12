@@ -1,0 +1,40 @@
+hw_ratio: '1.78'
+width: 1920
+height: 1080
+mode: event
+event_list:
+- sendevent /dev/input/event5 3 47 1
+- sendevent /dev/input/event5 3 57 1
+- sendevent /dev/input/event5 1 330 1
+- sendevent /dev/input/event5 3 53 889
+- sendevent /dev/input/event5 3 54 213
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 4294967295
+- sendevent /dev/input/event5 1 330 0
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 1
+- sendevent /dev/input/event5 1 330 1
+- sendevent /dev/input/event5 3 53 1814
+- sendevent /dev/input/event5 3 54 653
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 4294967295
+- sendevent /dev/input/event5 1 330 0
+- sendevent /dev/input/event5 0 0 0
+timestamp_list:
+- 0.0
+- 0.0
+- 0.0
+- 0.0009751319885253906
+- 0.0009751319885253906
+- 0.0009751319885253906
+- 0.09765815734863281
+- 0.09765815734863281
+- 0.09765815734863281
+- 2.0179600715637207
+- 2.0179600715637207
+- 2.0179600715637207
+- 2.018937349319458
+- 2.018937349319458
+- 2.1156201362609863
+- 2.1156201362609863
+- 2.1156201362609863

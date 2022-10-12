@@ -1,13 +1,8 @@
 refill_with_item: false
 plan:
-- stages:
-  - DH-9: 9999
-    //: ' '
-    sanity: 18
-    remain: 9930
+- blue_item: 100
 - planner:  # 每日轮换材料储备
   - 净龙门币: 420000
-  - 采购凭证: 720
   - 医疗芯片: 10
   - 重装芯片: 10
   - 狙击芯片: 10
@@ -27,29 +22,22 @@ plan:
   - 技能书3合成: 40
   - 技能书2: 30
   - 技能书1: 30
-- planner:
-  - 净龙门币: 540000
-  - 经验本: 1079400
+  - 采购凭证: 720
 - blue_item:
-# TODO:
-# - 风笛 3专三
-# - 凯尔希 2专三
-# - 铃兰 3专三
-# - 风笛 2专三
-
-
-
-
-#- stages:
-#  - DV-6: 20
-#    //: ' '
-#    sanity: 21
-#    remain: 1
-#  - DV-7: 20
-#    //: ' '
-#    sanity: 21
-#    remain: 1
-#  - DV-8: 20
-#    //: ' '
-#    sanity: 21
-#    remain: 2
+- stages:
+  - NL-2: 1
+    //: ' '
+    sanity: 9
+    remain: 0
+  - NL-8: 1
+    //: ' '
+    sanity: 18
+    remain: 0
+- eval:
+  - NL-8: max(owned['糖组'], owned['晶体元件'], owned['扭转醇']) - owned['糖组'] + 1
+  - NL-9: max(owned['糖组'], owned['晶体元件'], owned['扭转醇']) - owned['晶体元件'] + 1
+  - NL-10: max(owned['糖组'], owned['晶体元件'], owned['扭转醇']) - owned['扭转醇'] + 1
+- eval:
+  - 1-7: 7*20 - owned['提纯源岩']*20 - owned['固源岩组']*5 - owned['固源岩']
+- eval:
+  - 1-7: 1

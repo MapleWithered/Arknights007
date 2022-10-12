@@ -8,6 +8,7 @@ import requests
 import ruamel.yaml as yaml
 
 from .config import get_config_path
+from .main_menu import main_menu_reco_sanity
 from .navigator import goto_stage, back_to_main_menu
 from .battle import start_battle
 from .item_material import item_id_to_name, item_name_to_id, item_id_is_material_avail
@@ -15,7 +16,7 @@ from .penguin_stats import arkplanner
 from .resource.navigator import get_stage_sanity_cost
 from .imgreco.inventory.reco import get_inventory_items_all_information
 from .arkplanner.MaterialPlanning import MaterialPlanning
-from . import logger
+from .prts_web_client import *
 
 _stages_not_open = []
 _stages_not_open_date_last_write_timestamp = 0
@@ -304,7 +305,7 @@ def create_plan_by_non_material(wish_list, my_inventory=None):
             sanity += count * 36
 
     # 技能书逻辑
-    book_stage_count = ceil(max(book_need[0]/1.5, book_need[1]/1.5, book_need[2]/2))
+    book_stage_count = ceil(max(book_need[0] / 1.5, book_need[1] / 1.5, book_need[2] / 2))
     if book_stage_count != 0:
         stage_task_list.append(
             {'stage': 'CA-5',
@@ -351,7 +352,7 @@ def get_aog_data():
     return _aog_data
 
 
-def get_min_blue_item_stage(item_excluded=None, stage_unavailable=None, my_items=None, aog_data=None):
+def get_min_blue_item_stage(item_excluded=None, stage_unavailable=None, my_items=None, aog_data=None) -> list:
     config = load_config()
     if item_excluded is None:
         item_excluded = config['item_excluded']
@@ -392,26 +393,31 @@ def get_min_blue_item_stage(item_excluded=None, stage_unavailable=None, my_items
     blue_items_data = aog_data['tier']['t3']
     stage_todo = None
     i = 0
+    all_blue_stages = []
     while i < len(list_my_blue_item):  # 要刷的蓝材料从自己最少的蓝材料开始
         if list_my_blue_item[i]['name'] == '固源岩组':
-            logger.info('蓝材料: ' + '固源岩组' +
-                        ', 当前数量(考虑合成固源岩): ' + str(list_my_blue_item[i]['count']) +
-                        ', 关卡: ' + '1-7' +
-                        ', 效率: ' + '1.000')
-            return '1-7'
+            # info('蓝材料: ' + '固源岩组' +
+            #             ', 当前数量(考虑合成固源岩): ' + str(list_my_blue_item[i]['count']) +
+            #             ', 关卡: ' + '1-7' +
+            #             ', 效率: ' + '1.000')
+            all_blue_stages.append(('1-7', list_my_blue_item[i]['count'], list_my_blue_item[i]['name'], '1.000'))
         for aog_blue_item in blue_items_data:
             if aog_blue_item['name'] == list_my_blue_item[i]['name']:  # 对于需要刷的这个蓝材料
                 stage_info = aog_order_stage(aog_blue_item)
                 for stage in stage_info:  # 对于能刷的关卡表
                     if stage[0] not in stage_unavailable:  # 如果这个关卡能刷
                         stage_todo = stage[0]
-                        logger.info('蓝材料: ' + list_my_blue_item[i]['name'] +
-                                    ', 当前数量: ' + str(list_my_blue_item[i]['count']) +
-                                    ', 关卡: ' + stage_todo +
-                                    ', 效率: ' + str(stage[1]))
-                        return stage_todo
+                        # info('蓝材料: ' + list_my_blue_item[i]['name'] +
+                        #             ', 当前数量: ' + str(list_my_blue_item[i]['count']) +
+                        #             ', 关卡: ' + stage_todo +
+                        #             ', 效率: ' + str(stage[1]))
+                        all_blue_stages.append(
+                            (stage_todo, list_my_blue_item[i]['count'], list_my_blue_item[i]['name'], stage[1]))
+                        break
         i += 1
-    return stage_todo
+    # 按升序排序
+    all_blue_stages.sort(key=lambda x: x[1])
+    return all_blue_stages
 
 
 def get_good_stage_id(stages_same_prior):
@@ -432,6 +438,21 @@ def get_good_stage_id(stages_same_prior):
     return stage_ok_id
 
 
+def eval_calc_and_sort(eval_stages_same_prior, my_inventory):
+    import re
+    owned = {}
+    for item in my_inventory:
+        owned[item_id_to_name(item)] = my_inventory[item]
+    stages_eval_res = []
+    for i in range(len(eval_stages_same_prior)):
+        stage = list(eval_stages_same_prior[i])[0]
+        stage_eval_str = str(eval_stages_same_prior[i][stage])
+        stage_eval_str = re.sub(r'owned\[[\'\"]([^\']*)[\'\"]]', r'owned.get("\1", 0)', stage_eval_str)
+        stages_eval_res.append((stage, eval(stage_eval_str, {'owned': owned}), stage_eval_str))
+    stages_eval_res = sorted(stages_eval_res, key=lambda x: x[1], reverse=True)
+    return stages_eval_res
+
+
 def get_planner_good_stage_id(stages_same_prior):
     config = load_config()
     stage_ok_id = -1
@@ -449,7 +470,7 @@ def get_planner_good_stage_id(stages_same_prior):
 def get_my_item_count(item_name, my_items=None):
     if my_items is None:
         my_items = load_inventory()
-    # logger.info("从在线数据库中获取游戏物品列表")
+    # info("从在线数据库中获取游戏物品列表")
     if item_name_to_id(item_name) in list(my_items):
         return my_items[item_name_to_id(item_name)]
     else:
@@ -468,11 +489,11 @@ def print_sanity_usage(sanity):
             int(hour_rest_monthly % 24) + 1) + " 小时"
     else:
         str_hour_rest_monthly = str(int(hour_rest_monthly % 24) + 1) + " 小时"
-    logger.info("当前优先级仍需 " + str(sanity) + " 理智  -  " + str_hour_rest + " / " + str_hour_rest_monthly + " (Prime)")
+    info("当前优先级仍需 " + str(sanity) + " 理智  -  " + str_hour_rest + " / " + str_hour_rest_monthly + " (Prime)")
 
 
 def print_exp_lmb_info(my_inventory):
-    logger.info(
+    info(
         f"龙门币 {my_inventory.get('4001', 0)} - 作战记录 {my_inventory['total_exp']} = {my_inventory['net_lmb']} 净龙门币余额")
 
 
@@ -483,10 +504,10 @@ def print_plan_with_plan(plan=None, my_inventory=None, print_priority=None):
     if my_inventory is None:
         my_inventory = load_inventory()
     if print_priority is None:
-        logger.info("\n\n\n\n\n\n\n\n\n\n\n\n")
-        logger.warning("当前刷图计划：")
+        info("\n\n\n\n\n\n\n\n\n\n\n\n")
+        warning("当前刷图计划：")
 
-    logger.info("----------------------------------------------------------------------------------------")
+    info("----------------------------------------------------------------------------------------")
 
     prior = 1
     ok_task_used = False
@@ -500,7 +521,7 @@ def print_plan_with_plan(plan=None, my_inventory=None, print_priority=None):
         priority_first_line = True
         if list(priority)[0] == 'stages':
             if print_priority == prior or print_priority is None:
-                logger.info(
+                info(
                     "优先  " + "关卡".ljust(12) + "理智".ljust(5) + "计划".ljust(5) + "剩余".ljust(5) + "余比".ljust(8) + "备注")
             stages_same_prior = priority['stages']
             ok_id = get_good_stage_id(stages_same_prior)
@@ -523,32 +544,104 @@ def print_plan_with_plan(plan=None, my_inventory=None, print_priority=None):
                     priority_str = '      '
                 if print_priority == prior or print_priority is None:
                     if fini_percent == 100 or task[list(task)[0]] >= 1000 or fini_percent == 0:
-                        logger.info(priority_str + list(task)[0].ljust(
+                        info(priority_str + list(task)[0].ljust(
                             14 - int((len(list(task)[0].encode('utf-8')) - len(list(task)[0])) / 2)) + str(
                             task.get('sanity', '')).ljust(7) + str(task[list(task)[0]]).ljust(7) + str(remain).ljust(
                             7) + " --  " + status_char + "    " + task['//'])
                     else:
-                        logger.info(priority_str + list(task)[0].ljust(
+                        info(priority_str + list(task)[0].ljust(
                             14 - int((len(list(task)[0].encode('utf-8')) - len(list(task)[0])) / 2)) + str(
                             task.get('sanity', '')).ljust(7) + str(task[list(task)[0]]).ljust(7) + str(remain).ljust(
                             7) + str(
                             fini_percent).rjust(3) + "% " + status_char + "    " + task['//'])
             if print_priority == prior or print_priority is None:
-                logger.info("----------------------------------------------------------------------------------------")
+                info("----------------------------------------------------------------------------------------")
+        elif list(priority)[0] == 'eval':
+            if print_priority == prior or print_priority is None:
+                info(
+                    "优先  " + "关卡".ljust(12) + "eval结果" + '   ' + "eval源")
+            stages_same_prior = priority['eval']
+            eval_stage_sorted_list = eval_calc_and_sort(stages_same_prior, my_inventory)
+            for i in range(len(eval_stage_sorted_list)):
+                stage_name = eval_stage_sorted_list[i][0]
+                stage_count = eval_stage_sorted_list[i][1]
+                stage_eval_str = eval_stage_sorted_list[i][2]
+
+                if priority_first_line:
+                    priority_first_line = False
+                    priority_str = ' ' + str(prior).zfill(2).ljust(5)
+                else:
+                    priority_str = '      '
+
+                if stage_count <= 0:
+                    status_char = '√'
+                elif stage_name in get_stages_not_open():
+                    status_char = '×'
+                elif i == 0 and ok_task_used is False:
+                    status_char = '○'
+                    ok_task_used = prior - 1
+                else:
+                    status_char = ' '
+
+                if print_priority == prior or print_priority is None:
+                    info(
+                        priority_str +
+                        stage_name.ljust(14 - int((len(stage_name.encode('utf-8')) - len(stage_name)) / 2)) +
+                        str(stage_count).ljust(8) +
+                        f' {status_char} ' +
+                        stage_eval_str)
+
+            if print_priority == prior or print_priority is None:
+                info("----------------------------------------------------------------------------------------")
         elif list(priority)[0] == 'blue_item':
-            if print_priority == prior or print_priority is None:
-                logger.info("优先  " + "任务".ljust(12))
-            if ok_task_used is False:
-                status_char = '○'
-                ok_task_used = prior - 1
+            blue_stages = get_min_blue_item_stage(my_items=my_inventory, aog_data=get_aog_data())
+
+            min_blue_stage, min_blue_owned, min_blue_name, min_blue_efficiency = blue_stages[0]
+
+            if str(priority['blue_item']).isdigit():
+                if min_blue_owned >= int(priority['blue_item']):
+                    status_char = '√'
+                elif min_blue_stage in get_stages_not_open() + config['stage_unavailable']:
+                    status_char = '×'
+                elif ok_task_used is False:
+                    status_char = '○'
+                    ok_task_used = prior - 1
+                else:
+                    status_char = ' '
             else:
-                status_char = ' '
+                if ok_task_used is False:
+                    status_char = '○'
+                    ok_task_used = prior - 1
+                else:
+                    status_char = ' '
+
             if print_priority == prior or print_priority is None:
-                logger.info(' ' + str(prior).zfill(2).ljust(5) + '@BLUE_ITEM'.ljust(20) + status_char)
-                logger.info("----------------------------------------------------------------------------------------")
+                info("优先  任务  关卡        材料       余量    效率    需求")
+                for min_blue_stage, min_blue_owned, min_blue_name, min_blue_efficiency in blue_stages:
+                    if priority_first_line:
+                        priority_first_line = False
+                        priority_str = ' ' + str(prior).zfill(2).ljust(5)
+                        blue_str = 'BLUE  '
+                    else:
+                        priority_str = '      '
+                        blue_str = '      '
+                        if not str(priority['blue_item']).isdigit() or min_blue_owned < int(priority['blue_item']):
+                            status_char = ' '
+                        else:
+                            status_char = '√'
+                    info(
+                        priority_str +
+                        blue_str +
+                        min_blue_stage.ljust(8) +
+                        ' ' + status_char + '  ' +
+                        min_blue_name.ljust(11 - int((len(min_blue_name.encode('utf-8')) - len(min_blue_name)) / 2)) +
+                        str(min_blue_owned).ljust(8) +
+                        str(min_blue_efficiency).ljust(8) +
+                        str(priority['blue_item']).ljust(8))
+                info("----------------------------------------------------------------------------------------")
         elif list(priority)[0] == 'planner':
             if print_priority == prior or print_priority is None:
-                logger.info("优先  " + "物品".ljust(12) + "已有".ljust(5) + "计划".ljust(5) + "仍需".ljust(5))
+                info("优先  " + "物品".ljust(12) + "已有".ljust(5) + "计划".ljust(5) + "仍需".ljust(5))
             item_list = []
             for item in priority[list(priority)[0]]:
                 item_num_had = get_my_item_count(list(item)[0], my_inventory)
@@ -563,20 +656,21 @@ def print_plan_with_plan(plan=None, my_inventory=None, print_priority=None):
                 else:
                     priority_str = '      '
                 if print_priority == prior or print_priority is None:
-                    logger.info(
+                    info(
                         priority_str + item_name.ljust(
                             14 - int((len(item_name.encode('utf-8')) - len(item_name)) / 2)) +
                         str(item_num_had if item_num_had else '-').ljust(7) + str(item[list(item)[0]]).ljust(7) +
-                        str(max(item_num_need - item_num_had, 0) if max(item_num_need - item_num_had, 0) else '-').ljust(8))
+                        str(max(item_num_need - item_num_had, 0) if max(item_num_need - item_num_had,
+                                                                        0) else '-').ljust(8))
             arkplanner_plan_1, total_sanity_1 = create_plan_by_material(item_list, my_inventory)
             arkplanner_plan_2, total_sanity_2 = create_plan_by_non_material(item_list, my_inventory)
             arkplanner_plan = arkplanner_plan_2 + arkplanner_plan_1
             total_sanity = total_sanity_1 + total_sanity_2
             if len(arkplanner_plan) > 0:
                 if print_priority == prior or print_priority is None:
-                    logger.info(
+                    info(
                         "                                                   -  -  ↓     arkplanner     ↓  -  -   ")
-                    logger.info("      " + "关卡".ljust(12) + "理智".ljust(5) + "计划".ljust(5))
+                    info("      " + "关卡".ljust(12) + "理智".ljust(5) + "计划".ljust(5))
                 ok_id = get_planner_good_stage_id(arkplanner_plan)
                 for task_id, task in enumerate(arkplanner_plan):
                     if task['count'] == 0:
@@ -590,12 +684,12 @@ def print_plan_with_plan(plan=None, my_inventory=None, print_priority=None):
                     else:
                         status_char = ' '
                     if print_priority == prior or print_priority is None:
-                        logger.info(''.ljust(6) + task['stage'].ljust(
+                        info(''.ljust(6) + task['stage'].ljust(
                             14 - int((len(task['stage'].encode('utf-8')) - len(task['stage'])) / 2)) + str(
                             task['cost']).ljust(7) + str(task['count']).ljust(7) + ''.ljust(7) + ''.rjust(
                             3) + "  " + status_char)
             if print_priority == prior or print_priority is None:
-                logger.info("----------------------------------------------------------------------------------------")
+                info("----------------------------------------------------------------------------------------")
         prior += 1
 
     ok_priority_data = plan['plan'][ok_task_used][list(plan['plan'][ok_task_used])[0]]
@@ -608,19 +702,17 @@ def print_plan_with_plan(plan=None, my_inventory=None, print_priority=None):
     if print_priority is None:  # 要打印信息        # ok_task_used + 1 == print_priority or
         if ok_cost is not None:  # 有理智消耗信息的情况
             print_sanity_usage(ok_cost)
-        elif ok_priority_category == "blue_item":  # 蓝材料的情况
-            get_min_blue_item_stage(my_items=my_inventory, aog_data=get_aog_data())
 
         print_exp_lmb_info(my_inventory)
 
     return ok_cost
 
 
-def run_plan():
+def run_plan(reserve_sanity=0):
     plan = load_local_plan()
     assert plan['plan'], "刷图计划文件中未能检测到刷图计划，或格式错误"
 
-    logger.warning('开始刷图')
+    warning('开始刷图')
 
     has_remain_sanity = True
 
@@ -634,6 +726,13 @@ def run_plan():
     mp.update()
 
     while has_remain_sanity:
+        plan = load_local_plan()
+        assert plan['plan'], "刷图计划文件中未能检测到刷图计划，或格式错误"
+        back_to_main_menu()
+        if main_menu_reco_sanity(force=True) < reserve_sanity:
+            has_remain_sanity = False
+            log(f'理智不足({main_menu_reco_sanity()}<{reserve_sanity})')
+            break
         for priority in plan['plan']:
             if list(priority)[0] != 'stages' and inventory_loaded is False:
                 my_inventory: dict = load_inventory()
@@ -649,23 +748,28 @@ def run_plan():
             # 找出符合要求的关卡：余比最高的开放关卡
             stage_ok_id = get_good_stage_id(stages_same_prior)
             if stage_ok_id == -1:
-                logger.warning('优先级 ' + str(priority_id) + ' 无剩余未完成开放关卡')
+                warning('优先级 ' + str(priority_id) + ' 无剩余未完成开放关卡')
                 priority_id += 1
                 continue  # 没有未完成的开放关卡，下一优先级
             stage_data = stages_same_prior[stage_ok_id]
             stage_name = list(stage_data)[0]
             stage_count = stage_data[list(stage_data)[0]]
             stage_remain = stage_data['remain']
-            logger.warning('优先级: %s, 关卡 [%s], 总计划: %s, 剩余次数: %s, 备注: %s' % (
+            warning('优先级: %s, 关卡 [%s], 总计划: %s, 剩余次数: %s, 备注: %s' % (
                 priority_id, stage_name, stage_count, stage_remain, stage_data['//']))
             try:
+                back_to_main_menu()
+                need_sanity = get_stage_sanity_cost(stage_name)
+                if main_menu_reco_sanity(force=True) - need_sanity < reserve_sanity:
+                    has_remain_sanity = False
+                    log(f'理智不足({main_menu_reco_sanity()}-{need_sanity}<{reserve_sanity})')
+                    break
                 # 执行未完成的开放关卡一次
                 goto_stage(stage_name, optimistic=False)
                 suc = start_battle(stage_name)
                 inventory_loaded = False
                 if not suc:  # 理智不足未进行单次任务执行
                     has_remain_sanity = False
-                    need_sanity = get_stage_sanity_cost(stage_name)
                     # 退出遍历
                     break
                 else:  # 成功执行一次任务
@@ -676,29 +780,82 @@ def run_plan():
             except RuntimeError as e:
                 if "日替资源关卡未开放" in e.args[0] or "ocr找不到关卡" in e.args[0]:
                     # 未开放，加入未开放关卡列表中
-                    logger.info('关卡 [%s] 未开放, 继续下一关卡' % stage_name)
+                    info('关卡 [%s] 未开放, 继续下一关卡' % stage_name)
                     push_stages_not_open(stage_name)
-                    logger.info('当日未开放关卡列表：' + str(get_stages_not_open()))
+                    info('当日未开放关卡列表：' + str(get_stages_not_open()))
                     continue
                 else:
                     # TODO: 其他错误handle, 错误重试限制
                     continue
             except TimeoutError as e:
-                logger.warning('关卡 [%s] 超时, 返回主页重试' % stage_name)
+                warning('关卡 [%s] 超时, 返回主页重试' % stage_name)
+                back_to_main_menu()
+                continue
+        elif list(priority)[0] == 'eval':
+            stages_same_prior = priority['eval']
+            eval_stage_sorted_list = eval_calc_and_sort(stages_same_prior, my_inventory)
+            if eval_stage_sorted_list[0][1] <= 0:
+                warning('优先级 ' + str(priority_id) + ' 无剩余未完成开放关卡')
+                priority_id += 1
+                continue  # 没有未完成的开放关卡，下一优先级
+            stage_name = eval_stage_sorted_list[0][0]
+            stage_count = eval_stage_sorted_list[0][1]
+            stage_eval_str = eval_stage_sorted_list[0][2]
+            warning(f'优先级: {priority_id}, 关卡 [{stage_name}], eval字符串: {stage_eval_str}, eval结果: {stage_count}')
+            try:
+                back_to_main_menu()
+                need_sanity = get_stage_sanity_cost(stage_name)
+                if main_menu_reco_sanity(force=True) - need_sanity < reserve_sanity:
+                    has_remain_sanity = False
+                    log(f'理智不足({main_menu_reco_sanity()}-{need_sanity}<{reserve_sanity})')
+                    break
+                # 执行未完成的开放关卡一次
+                goto_stage(stage_name, optimistic=False)
+                suc = start_battle(stage_name)
+                inventory_loaded = False
+                if not suc:  # 理智不足未进行单次任务执行
+                    has_remain_sanity = False
+                    # 退出遍历
+                    break
+                else:  # 成功执行一次任务
+                    continue
+            except RuntimeError as e:
+                if "日替资源关卡未开放" in e.args[0] or "ocr找不到关卡" in e.args[0]:
+                    # 未开放，加入未开放关卡列表中
+                    info('关卡 [%s] 未开放, 继续下一关卡' % stage_name)
+                    push_stages_not_open(stage_name)
+                    info('当日未开放关卡列表：' + str(get_stages_not_open()))
+                    continue
+                else:
+                    # TODO: 其他错误handle, 错误重试限制
+                    continue
+            except TimeoutError as e:
+                warning('关卡 [%s] 超时, 返回主页重试' % stage_name)
                 back_to_main_menu()
                 continue
         elif list(priority)[0] == 'blue_item':
-            logger.warning("优先级: " + str(priority_id) + ", 刷仓库中最少的蓝材料")
-            min_blue_stage = get_min_blue_item_stage(my_items=my_inventory, aog_data=get_aog_data())
-            logger.warning('优先级: %s, 关卡 [%s]' % (
-                priority_id, min_blue_stage))
+            blue_stages = get_min_blue_item_stage(my_items=my_inventory, aog_data=get_aog_data())
+            min_blue_stage, min_blue_owned, min_blue_name, min_blue_efficiency = blue_stages[0]
+            if str(priority['blue_item']).isdigit():
+                if min_blue_owned >= int(priority['blue_item']) or min_blue_stage in get_stages_not_open():
+                    warning('优先级 ' + str(priority_id) + ' 无剩余未完成开放关卡')
+                    priority_id += 1
+                    continue  # 没有未完成的开放关卡，下一优先级
+
+            warning('优先级: %s, 刷蓝材料 %s, 关卡 [%s]' % (
+                priority_id, min_blue_name, min_blue_stage))
             try:
+                back_to_main_menu()
+                need_sanity = get_stage_sanity_cost(min_blue_stage)
+                if main_menu_reco_sanity(force=True) - need_sanity < reserve_sanity:
+                    has_remain_sanity = False
+                    log(f'理智不足({main_menu_reco_sanity()}-{need_sanity}<{reserve_sanity})')
+                    break
                 goto_stage(min_blue_stage, optimistic=False)
                 suc = start_battle(min_blue_stage)
                 inventory_loaded = False
                 if not suc:  # 理智不足未进行单次任务执行
                     has_remain_sanity = False
-                    need_sanity = get_stage_sanity_cost(min_blue_stage)
                     # 退出遍历
                     break
                 else:
@@ -706,15 +863,15 @@ def run_plan():
             except RuntimeError as e:
                 if "日替资源关卡未开放" in e.args[0] or "ocr找不到关卡" in e.args[0]:
                     # 未开放，加入未开放关卡列表中
-                    logger.info('关卡 [%s] 未开放, 继续下一关卡' % min_blue_stage)
+                    info('关卡 [%s] 未开放, 继续下一关卡' % min_blue_stage)
                     push_stages_not_open(min_blue_stage)
-                    logger.info('当日未开放关卡列表：' + str(get_stages_not_open()))
+                    info('当日未开放关卡列表：' + str(get_stages_not_open()))
                     continue
                 else:
                     # TODO: 其他错误handle, 错误重试限制
                     continue
             except TimeoutError as e:
-                logger.warning('关卡 [%s] 超时, 返回主页重试' % min_blue_stage)
+                warning('关卡 [%s] 超时, 返回主页重试' % min_blue_stage)
                 back_to_main_menu()
                 continue
         elif list(priority)[0] == 'planner':
@@ -730,17 +887,22 @@ def run_plan():
             total_sanity = total_sanity_1 + total_sanity_2
             ok_id = get_planner_good_stage_id(arkplanner_plan)
             if len(arkplanner_plan) > 0 and ok_id != -1:
-                logger.warning('优先级: %s, 关卡 [%s], 剩余次数: %s' % (
+                warning('优先级: %s, 关卡 [%s], 剩余次数: %s' % (
                     priority_id, arkplanner_plan[ok_id]['stage'], arkplanner_plan[ok_id]['count']))
 
                 try:
+                    back_to_main_menu()
+                    need_sanity = get_stage_sanity_cost(arkplanner_plan[ok_id]['stage'])
+                    if main_menu_reco_sanity(force=True) - need_sanity < reserve_sanity:
+                        has_remain_sanity = False
+                        log(f'理智不足({main_menu_reco_sanity()}-{need_sanity}<{reserve_sanity})')
+                        break
                     # 执行未完成的开放关卡一次
                     goto_stage(arkplanner_plan[ok_id]['stage'], optimistic=False)
                     suc = start_battle(arkplanner_plan[ok_id]['stage'])
                     inventory_loaded = False
                     if not suc:  # 理智不足未进行单次任务执行
                         has_remain_sanity = False
-                        need_sanity = get_stage_sanity_cost(arkplanner_plan[ok_id]['stage'])
                         # 退出遍历
                         break
                     else:  # 成功执行一次任务
@@ -748,26 +910,26 @@ def run_plan():
                 except RuntimeError as e:
                     if "日替资源关卡未开放" in e.args[0] or "ocr找不到关卡" in e.args[0]:
                         # 未开放，加入未开放关卡列表中
-                        logger.info('关卡 [%s] 未开放, 继续下一关卡' % arkplanner_plan[ok_id]['stage'])
+                        info('关卡 [%s] 未开放, 继续下一关卡' % arkplanner_plan[ok_id]['stage'])
                         push_stages_not_open(arkplanner_plan[ok_id]['stage'])
-                        logger.info('当日未开放关卡列表：' + str(get_stages_not_open()))
+                        info('当日未开放关卡列表：' + str(get_stages_not_open()))
                         continue
                     else:
                         # TODO: 其他错误handle, 错误重试限制
                         print(e)
                         continue
                 except TimeoutError as e:
-                    logger.warning('关卡 [%s] 超时, 返回主页重试' % (arkplanner_plan[ok_id]['stage']))
+                    warning('关卡 [%s] 超时, 返回主页重试' % (arkplanner_plan[ok_id]['stage']))
                     back_to_main_menu()
                     continue
             else:
-                logger.warning('优先级 ' + str(priority_id) + ' 无剩余未完成开放关卡')
+                warning('优先级 ' + str(priority_id) + ' 无剩余未完成开放关卡')
                 priority_id += 1
                 continue  # 没有未完成的开放关卡，下一优先级
     back_to_main_menu()
     time.sleep(1)
 
     if not has_remain_sanity:
-        logger.info('理智已清空')
+        info('理智已清空')
 
     return need_sanity

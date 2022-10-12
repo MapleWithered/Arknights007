@@ -170,6 +170,7 @@ def ocr_all_stage_tag_and_std_position(stage_map, debug_show=False, cn_ocr_objec
             rect_temp.x1 + 220,
             rect_temp.y1 + 45)
         img_cropped = imgops.mat_crop(img_screenshot, rect_temp)
+        img_cropped = imgops.mat_pick_color_rgb(img_cropped, Color(255, 255, 255), 120)
         if debug_show:
             plt.imshow(img_cropped)
             plt.show()

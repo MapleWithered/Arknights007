@@ -2,7 +2,7 @@ from collections import namedtuple
 
 import numpy as np
 
-from .navigator import is_main_menu
+from .navigator import is_main_menu, back_to_main_menu
 from . import resource as res
 from .adb import ADB
 from .imgreco import imgops
@@ -21,7 +21,11 @@ OCRSTDSingleResult = namedtuple("OCRSTDSingleResult", ['str', 'rect', 'val'])
 
 
 def main_menu_reco_sanity(force=False):
-    assert is_main_menu()
+    try:
+        assert is_main_menu()
+    except AssertionError:
+        back_to_main_menu()
+        assert is_main_menu()
     img = ADB.screencap_mat(gray=False, std_size=True, force=force)
     img = imgops.mat_pick_color_rgb(img, Color(51, 51, 51))
     img[img != 0] = 255
@@ -35,6 +39,11 @@ def main_menu_reco_sanity(force=False):
 
 
 def main_check_task_remain():
+    try:
+        assert is_main_menu()
+    except AssertionError:
+        back_to_main_menu()
+        assert is_main_menu()
     img = ADB.screencap_mat(gray=False, std_size=True)
     img = imgops.mat_pick_color_rgb(img, Color(230, 98, 41))
     corner_rect = res.navigator.get_pos("/main_menu/task_number")
@@ -47,6 +56,11 @@ def main_check_task_remain():
 
 
 def main_check_ship_remain():
+    try:
+        assert is_main_menu()
+    except AssertionError:
+        back_to_main_menu()
+        assert is_main_menu()
     img = ADB.screencap_mat(gray=False, std_size=True)
     img = imgops.mat_pick_color_rgb(img, Color(35, 159, 214))
     corner_rect = res.navigator.get_pos("/main_menu/ship_info")
@@ -61,6 +75,11 @@ def main_check_ship_remain():
 
 
 def main_check_shop_remain():
+    try:
+        assert is_main_menu()
+    except AssertionError:
+        back_to_main_menu()
+        assert is_main_menu()
     img = ADB.screencap_mat(gray=False, std_size=True)
     img = imgops.mat_pick_color_rgb(img, Color(255, 104, 1))
     corner_rect = res.navigator.get_pos("/main_menu/shop_corner_notification")

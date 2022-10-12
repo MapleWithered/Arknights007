@@ -1,2 +1,2 @@
 use_server: true
-use_cli: true
+use_cli: false

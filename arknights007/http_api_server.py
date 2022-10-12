@@ -7,7 +7,7 @@ app = Flask(__name__)
 socketio = SocketIO(app)
 
 sys_state_run = {
-    'task': [True, True, True, True, True, True],
+    'task': [True, True, True, True, True, True],       # 刷图 基建 好友 信用 公招 任务
     'run': False,
 }
 
@@ -15,6 +15,7 @@ log_buffer = []
 
 
 def update_all_ui():
+    sys_state_run['run'] = daemon.PRTSDaemon.get_status() != daemon.Status.IDLE
     emit('ui_update/update_sys_state', sys_state_run, broadcast=True)
 
 
@@ -40,6 +41,22 @@ def on_log(data):
     log_buffer.append(data)
     if len(log_buffer) > 100:
         log_buffer.pop(0)
+
+
+#######################################################
+# HTTP API for PRTS
+
+@app.route('/api/v1/runner_task', methods=['GET'])
+def get_runner_task():
+    runner_task = {
+        'plan': sys_state_run['task'][0],
+        'ship': sys_state_run['task'][1],
+        'friend': sys_state_run['task'][2],
+        'credit_store': sys_state_run['task'][3],
+        'public_recruit': sys_state_run['task'][4],
+        'task': sys_state_run['task'][5]
+    }
+    return jsonify(runner_task)
 
 
 #######################################################

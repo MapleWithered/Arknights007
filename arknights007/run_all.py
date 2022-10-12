@@ -14,7 +14,7 @@ from prts.friend import run_friend
 from prts.public_recruit import run_public_recruit
 from prts.shopping_center import run_credit_store
 from prts.main_menu import main_menu_reco_sanity
-from prts.logger import log
+from prts.prts_web_client import log
 import datetime
 
 

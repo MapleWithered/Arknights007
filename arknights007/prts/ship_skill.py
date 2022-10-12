@@ -120,6 +120,9 @@ def reco_matrix(img_gray, skillrect_list, skill_list, score_above_than=0.8, debu
     reco_result = []
     for rect in skillrect_list:
         img_cropped = imgops.mat_crop(img_gray, rect.rect)
+        brightness = np.amax(cv2.cvtColor(img_cropped, cv2.COLOR_BGR2GRAY))
+        if brightness < 200:
+            continue
         if debug_show:
             plt.imshow(img_cropped)
             plt.show()
@@ -189,7 +192,7 @@ def choose_skill_generic(scene_skill_keyword, category_limit, self_conflict_skil
     skill_visible = reco_skills(debug_show=False)
     all_people_dict: dict[int, SinglePeople] = {}
     for single_result in skill_visible:
-        if scene_skill_keyword not in single_result.name:
+        if scene_skill_keyword not in single_result.name or single_result.val < 0.9:
             continue
         try:
             priority = priority_dict[single_result.name]
