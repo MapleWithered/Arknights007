@@ -144,8 +144,8 @@
     summary: [ 38, 135, 340, 224 ]
     summary_scene:
       ensure: [ 351, 518, 500, 555 ]
-      right_swipe_1: [ 1650, 800 ]
-      right_swipe_2: [ 1650, 500 ]
+      right_swipe_1: [ 1650, 1000 ]
+      right_swipe_2: [ 1650, 400 ]
       plus:
         dy_to_anchor: -6
         x_anchor: 648
@@ -184,6 +184,13 @@
         step_3: [ 1445, 505 ]
         step_4: [ 1417, 875 ]
         step_5: [ 1695, 965 ]
+      produce_gold:
+        step_0: [ 545, 480 ]
+        step_1: [ 93, 1015 ]
+        step_2: [ 1836, 811 ]
+        step_3: [ 1445, 505 ]
+        step_4: [ 1417, 875 ]
+        step_5: [ 1695, 965 ]
       trade_gold:
         step_0: [ 302, 478 ]
         step_1: [ 602, 927 ]
@@ -191,4 +198,5 @@
         step_3: [ 1445, 505 ]
         step_4: [ 1417, 875 ]
         step_5: [ 1695, 965 ]
-
+  rogue:
+    enter_theme: [ 1540, 797 ]

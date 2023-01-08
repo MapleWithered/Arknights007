@@ -21,17 +21,18 @@ OCRSTDSingleResult = namedtuple("OCRSTDSingleResult", ['str', 'rect', 'val'])
 
 
 def save_screenshot_after_battle(stage: str):
-    img = ADB.screencap_mat(force=True, std_size=False)
-    # generate file path with timestamp
-    date_str = time.strftime("%Y%m%d", time.localtime())
-    time_str = time.strftime("%H%M%S", time.localtime())
-    file_name = f"{date_str}_{time_str}_{stage}.png"
-    folder_path = os.path.join("battle_screenshot", f"{date_str}")
-    if not os.path.exists(folder_path):
-        os.makedirs(folder_path)
-    file_path = os.path.join(folder_path, file_name)
-    # save image
-    imgops.save_image(img, file_path)
+    # img = ADB.screencap_mat(force=True, std_size=False)
+    # # generate file path with timestamp
+    # date_str = time.strftime("%Y%m%d", time.localtime())
+    # time_str = time.strftime("%H%M%S", time.localtime())
+    # file_name = f"{date_str}_{time_str}_{stage}.png"
+    # folder_path = os.path.join("battle_screenshot", f"{date_str}")
+    # if not os.path.exists(folder_path):
+    #     os.makedirs(folder_path)
+    # file_path = os.path.join(folder_path, file_name)
+    # # save image
+    # imgops.save_image(img, file_path)
+    pass
 
 
 @lru_cache()

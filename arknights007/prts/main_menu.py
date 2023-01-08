@@ -28,7 +28,7 @@ def main_menu_reco_sanity(force=False):
         assert is_main_menu()
     img = ADB.screencap_mat(gray=False, std_size=True, force=force)
     img = imgops.mat_pick_color_rgb(img, Color(51, 51, 51))
-    img[img != 0] = 255
+    img = img * 4
     corner_rect = res.navigator.get_pos("/main_menu/sanity_remain")
     img_cropped = imgops.mat_crop(img, Rect(*corner_rect))
     img_cropped = imgops.mat_bgr2gray(img_cropped)

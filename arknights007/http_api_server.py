@@ -36,7 +36,7 @@ def hello_world():
 
 @socketio.on('log', namespace='/prts')
 def on_log(data):
-    print("receive log: ", data)
+    print("|", data)
     socketio.emit('log', data, namespace='/socket', broadcast=True)
     log_buffer.append(data)
     if len(log_buffer) > 100:

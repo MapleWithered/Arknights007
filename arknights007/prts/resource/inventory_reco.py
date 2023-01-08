@@ -18,9 +18,9 @@ def _get_inv_reco_data_path(filename: typing.Optional[str] = None) -> str:
 
 def _download_inv_reco_data_from_all_server(filename: str) -> bytes:
     file_url = [
-        "https://cdn.jsdelivr.net/gh/triwinds/arknights-ml@master/inventory/{}".format(filename),
-        "https://raw.fastgit.org/triwinds/arknights-ml/master/inventory/{}".format(filename),
-        "https://raw.githubusercontent.com/triwinds/arknights-ml/master/inventory/{}".format(filename),
+        "https://cdn.jsdelivr.net/gh/MapleWithered/arknights-ml@master/inventory/{}".format(filename),
+        "https://raw.fastgit.org/MapleWithered/arknights-ml/master/inventory/{}".format(filename),
+        "https://raw.githubusercontent.com/MapleWithered/arknights-ml/master/inventory/{}".format(filename),
     ]
     res = download_from_multiple_servers(file_url)
     return res

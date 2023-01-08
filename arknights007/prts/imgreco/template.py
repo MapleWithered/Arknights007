@@ -55,7 +55,7 @@ def match_masked_template_best(img, template, mask, method=cv2.TM_CCOEFF_NORMED,
     return RectResult(Rect(top_left[0], top_left[1], bottom_right[0], bottom_right[1]), val)
 
 
-def match_template_best(img, template, method=cv2.TM_SQDIFF_NORMED, show_result=False):
+def match_template_best(img, template, method=cv2.TM_SQDIFF_NORMED, show_result=False) -> RectResult:
     # Apply template Matching
     res = cv2.matchTemplate(img, templ=template, method=method)
     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
@@ -67,7 +67,7 @@ def match_template_best(img, template, method=cv2.TM_SQDIFF_NORMED, show_result=
     else:
         top_left = max_loc
         val = max_val
-    bottom_right = (top_left[0] + template.shape[::-1][0], top_left[1] + template.shape[::-1][1])
+    bottom_right = (top_left[0] + template.shape[::-1][-2], top_left[1] + template.shape[::-1][-1])
 
     if show_result:
         res_img = img.copy()

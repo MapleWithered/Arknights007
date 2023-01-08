@@ -4,7 +4,7 @@ from scipy.optimize import linprog
 from collections import defaultdict as ddict
 
 global penguin_url, headers, LanguageMap
-penguin_url = 'https://penguin-stats.io/PenguinStats/api/v2/'
+penguin_url = 'https://penguin-stats.cn/PenguinStats/api/v2/'
 headers = {'User-Agent': 'ArkPlanner'}
 LanguageMap = {'CN': 'zh', 'US': 'en', 'JP': 'ja', 'KR': 'ko'}
 
@@ -629,6 +629,7 @@ class MaterialPlanning(object):
 
 
 def get_json(s):
+    print("GET - " + s)
     req = urllib.request.Request(penguin_url + s, None, headers)
     with urllib.request.urlopen(req, timeout=5) as response:
         return json.loads(response.read().decode())
@@ -671,12 +672,16 @@ def request_data(url_stats, url_rules, save_path_stats, save_path_rules):
     except:
         pass
 
+    print("更新ArkPlanner数据中...")
+
+    print("GET - " + url_stats)
     req = urllib.request.Request(url_stats, None, headers)
     with urllib.request.urlopen(req, timeout=5) as response:
         material_probs = json.loads(response.read().decode())
         with open(save_path_stats, 'w') as outfile:
             json.dump(material_probs, outfile)
 
+    print("GET - " + url_rules)
     req = urllib.request.Request(url_rules, None, headers)
     with urllib.request.urlopen(req, timeout=5) as response:
         response = urllib.request.urlopen(req)

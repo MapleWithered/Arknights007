@@ -128,7 +128,7 @@ def ocr_rect_single_line(img_mat=None, rect: Rect = None, ocr_dict=None, debug_s
     ocr_res = cn_ocr.ocr_for_single_line(img_cropped)
     if debug_show:
         print('ocr result: %s' % str(ocr_res))
-    return OCRSingleResult(''.join(ocr_res[0]), ocr_res[1])
+    return OCRSingleResult(ocr_res['text'], ocr_res['score'])
 
 
 def ocr_main_story_episode() -> int:
@@ -183,7 +183,7 @@ def ocr_all_stage_tag_and_std_position(stage_map, debug_show=False, cn_ocr_objec
             ocr_res = cn_ocr.ocr_for_single_line(img_cropped)
         if debug_show:
             print('ocr result: %s' % str(ocr_res))
-        single_result = OCRSTDSingleResult(''.join(ocr_res[0]), rect_temp, ocr_res[1], 1)
+        single_result = OCRSTDSingleResult(''.join(ocr_res['text']), rect_temp, ocr_res['score'], 1)
         if single_result.str in stage_map:
             ocr_result.append(single_result)
         else:
@@ -199,7 +199,7 @@ def ocr_all_stage_tag_and_std_position(stage_map, debug_show=False, cn_ocr_objec
             ocr_res = cn_ocr.ocr_for_single_line(img_cropped)
             if debug_show:
                 print('ocr result: %s' % str(ocr_res))
-            single_result = OCRSTDSingleResult(''.join(ocr_res[0]), rect_temp, ocr_res[1], 1)
+            single_result = OCRSTDSingleResult(ocr_res['text'], rect_temp, ocr_res['score'], 1)
             if single_result.str in stage_map:
                 ocr_result.append(single_result)
     if debug_show:

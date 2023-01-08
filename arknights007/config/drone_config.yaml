@@ -1,5 +1,5 @@
 drone_mode: auto # auto, manual
-drone_auto_gold_threshold: 50
-drone_auto_operation_when_few_gold: produce_exp
-drone_auto_operation_when_much_gold: trade_gold
+drone_auto_gold_threshold: 200
+drone_auto_operation_when_few_gold: produce_gold # produce_exp
+drone_auto_operation_when_much_gold: produce_exp # trade_gold
 drone_manual_operation: produce_exp # trade_gold, produce_exp

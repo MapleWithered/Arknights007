@@ -44,6 +44,49 @@ def press_std_rect(path, sleep=True):
         time.sleep(1)
 
 
+def press_pattern_color(path, tolerance=0.1, sleep=True, screen=None):
+    img_pattern = res_img.get_img_bgr(path)
+    if screen is None:
+        img = ADB.screencap_mat(std_size=True, gray=False)
+    else:
+        img = imgops.mat_size_real_to_std(screen)
+    result = template.match_template_best(img, img_pattern)
+    if result.val > tolerance:
+        return False
+    else:
+        ADB.input_press_rect(imgops.from_std_rect(ADB.get_resolution(), Rect(*result.rect)))
+        if sleep:
+            time.sleep(1)
+        return True
+
+
+def press_pattern_gray(path, tolerance=0.1, sleep=True):
+    img_pattern = res_img.get_img_gray(path)
+    img = ADB.screencap_mat(std_size=True, gray=True)
+    result = template.match_template_best(img, img_pattern)
+    if result.val > tolerance:
+        return False
+    else:
+        ADB.input_press_rect(imgops.from_std_rect(ADB.get_resolution(), Rect(*result.rect)))
+        if sleep:
+            time.sleep(1)
+        return True
+
+
+def press_pattern_bw(path, threshold=128, tolerance=0.1, sleep=True):
+    img_pattern = res_img.get_img_gray(path)
+    img_pattern = imgops.mat_threshold(img_pattern, threshold)
+    img = imgops.mat_threshold(ADB.screencap_mat(std_size=True, gray=True), threshold)
+    result = template.match_template_best(img, img_pattern)
+    if result.val > tolerance:
+        return False
+    else:
+        ADB.input_press_rect(imgops.from_std_rect(ADB.get_resolution(), Rect(*result.rect)))
+        if sleep:
+            time.sleep(1)
+        return True
+
+
 def swipe_std_pos(path_start, path_end, duration_ms):
     pos_start = Pos(*imgops.from_std_pos(ADB.get_resolution(), Pos(*res_nav.get_pos(path_start))))
     pos_end = Pos(*imgops.from_std_pos(ADB.get_resolution(), Pos(*res_nav.get_pos(path_end))))
@@ -251,6 +294,8 @@ def back_to_main_menu():
             continue
         elif handle_close_button():
             continue
+        elif handle_rogue():
+            continue
         elif handle_unknown_scene():
             continue
         else:
@@ -259,6 +304,9 @@ def back_to_main_menu():
             if error_counter == 60:
                 raise RuntimeError("Unhandled scene.")
 
+
+def handle_rogue():
+    return press_pattern_color('/rogue/mizuki/exit_rogue.png')
 
 
 def back_to_terminal():
@@ -276,6 +324,8 @@ def back_to_terminal():
         elif handle_dialog():
             continue
         elif handle_close_button():
+            continue
+        elif handle_rogue():
             continue
         elif handle_unknown_scene():
             continue
@@ -340,10 +390,12 @@ def _is_num_char(ch: str) -> bool:
 def stage_is_main_chapter(stage: str):
     parts = stage.split('-')
     part0 = parts[0]
-    if _is_num_char(part0[-1]):  # '1-7', 'S4-1', etc
-        return int(part0[-1])
-    else:
+    part0_num = ''.join(filter(_is_num_char, part0))
+    # print(f"part0_num = {part0_num}")
+    if len(part0_num) == 0:
         return None
+    else:
+        return int(part0_num)
 
 
 def stage_is_resource(stage: str):
@@ -557,10 +609,14 @@ def record_new(path: str, start_from_terminal=True):
     record_data['event_list'] = event_list
     record_data['timestamp_list'] = timestamp_list
 
+    print(f"录制完成, 是否需要重命名录制的关卡? (当前: {os.path.split(path)[1]})\n[y/N]: ", end='')
+    if input().lower() == 'y':
+        print("请输入关卡名: ", end='')
+        path = os.path.join(os.path.split(path)[0], input().strip() + '.yaml')
     with open(path, 'w', encoding='utf-8') as f:
         yaml.dump(record_data, f, Dumper=yaml.RoundTripDumper, indent=2, allow_unicode=True, encoding='utf-8')
 
-    print("录制完成")
+
 
 
 def record_play(path, no_delay=False):
@@ -594,21 +650,36 @@ def goto_special_stage(stage: str, allow_new_record=True):
         stage_category = stage[:last_char_index + 1]
         if stage_category[-1] == '-':
             stage_category = stage_category[:-1]
-        path = res_img.get_img_path(
+        cat_path = res_img.get_img_path(
             '/special_stage_record/' + str(ADB.get_resolution().height) + 'p/' + stage_category + '.yaml')
-    else:
-        stage_category = stage[1:]
-        path = res_img.get_img_path(
-            '/special_stage_record/' + str(ADB.get_resolution().height) + 'p/' + stage_category + '.yaml')
+        stage_path = res_img.get_img_path(
+            '/special_stage_record/' + str(ADB.get_resolution().height) + 'p/' + stage + '.yaml')
 
-    if not os.path.exists(path):
+        if os.path.exists(stage_path):
+            record_play(stage_path)
+            return
+        if os.path.exists(cat_path):
+            record_play(cat_path)
+            return
         if allow_new_record:
-            print('开始录制 ' + stage_category)
-            record_new(path)
+            print(f'未找到{cat_path}或{stage_path} 开始录制{stage}')
+            record_new(cat_path)
+            return
         else:
             return -1
-    else:
-        record_play(path)
+    else:       # $开头的是特殊关卡
+        stage_path = res_img.get_img_path(
+            '/special_stage_record/' + str(ADB.get_resolution().height) + 'p/' + stage[1:] + '.yaml')
+
+        if not os.path.exists(stage_path):
+            if allow_new_record:
+                print(f'未找到{stage_path} 开始录制{stage[1:]}')
+                record_new(stage_path)
+            else:
+                return -1
+        else:
+            record_play(stage_path)
+            return
 
 
 def goto_stage(stage: str, optimistic=True):

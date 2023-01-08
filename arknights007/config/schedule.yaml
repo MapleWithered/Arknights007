@@ -1,0 +1,10 @@
+# schedule: timetable/sanity/once
+schedule: timetable
+timetable:
+- 02:00
+- 10:00
+- 16:00
+- 20:00
+sanity:
+  reserve_sanity: 21 # 36
+  single_run_sanity: next_round_sanity # 14   # next_round_sanity supported

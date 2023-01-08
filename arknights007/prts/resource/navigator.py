@@ -73,7 +73,7 @@ def check_activity_available(zone_id):
 def get_stage_map_local(stage: str) -> typing.Optional[list[str]]:
     res = load_yaml("navigator/stage_map.yaml")
     if navigator.stage_is_main_chapter(stage) is not None:
-        episode = 'ep0' + str(navigator.stage_is_main_chapter(stage))
+        episode = 'ep' + str(navigator.stage_is_main_chapter(stage)).rjust(2, '0')
         path = '/main_stage/' + episode
     elif navigator.stage_is_resource(stage) is not None:
         part0 = '-'.join(stage.split('-')[:-1])
@@ -112,7 +112,9 @@ def get_stage_info_and_map(stage: str):
 
 
 def get_stage_sanity_cost(stage_code: str):
+    stage_code.replace('$', '')
     stages = get_game_data_dict('stage_table.json')['stages']
     for stage in stages:
         if stages[stage].get('code', '') == stage_code:
             return stages[stage].get('apCost', -1)
+    return 18

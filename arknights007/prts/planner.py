@@ -189,6 +189,11 @@ def create_plan_by_non_material(wish_list, my_inventory=None):
                  [0, 0, 0, 0, 0, 0, 0, 0],
                  [0, 0, 0, 0, 0, 0, 0, 0]]  # small, large, duo
 
+    red_ticket_level_wish = 0
+    red_ticket_usage = 0
+
+    glue_remain = owned.get('芯片助剂', 0)
+
     lmb_need = 0
 
     book_need = [0, 0, 0]
@@ -205,11 +210,6 @@ def create_plan_by_non_material(wish_list, my_inventory=None):
         #     if count != 0:
         #         stage_task_list.append({'stage': 'LS-6', 'count': count, 'cost': 36})
         #         sanity += count * 36      # TODO: 加一个经验书是否刷的开关
-        elif item_need[0] in {'采购凭证', '红票'}:
-            count = max(0, ceil((item_need[1] - owned.get('采购凭证', 0)) / 20))
-            if count != 0:
-                stage_task_list.append({'stage': 'AP-5', 'count': count, 'cost': 30})
-                sanity += count * 30
         elif '技巧概要' in item_need[0] or '技能书' in item_need[0]:
             if '1' in item_need[0]:
                 book_need[0] = max(book_need[0], 0, item_need[1] - owned.get('技巧概要·卷1', 0))
@@ -228,14 +228,24 @@ def create_plan_by_non_material(wish_list, my_inventory=None):
                                               owned.get('技巧概要·卷2', 0)) / 3 * 1.17))
                 else:
                     book_need[2] = max(book_need[2], 0, item_need[1] - owned.get('技巧概要·卷3', 0))
-        elif '芯片' in item_need[0] and \
-                item_need[0][0:2] in chip_idx:
-            if len(item_need[0]) == 5 and item_need[0].endswith('芯片组'):
-                chip_wish[1][chip_idx[item_need[0][0:2]]] += item_need[1]
-            elif item_need[0].endswith('双芯片'):
-                chip_wish[2][chip_idx[item_need[0][0:2]]] += item_need[1]
-            elif len(item_need[0]) == 4 and item_need[0].endswith('芯片'):
-                chip_wish[0][chip_idx[item_need[0][0:2]]] += item_need[1]
+        elif '芯片' in item_need[0] and '助剂' not in item_need[0]:
+            if item_need[0][0:2] in chip_idx:
+                if len(item_need[0]) == 5 and item_need[0].endswith('芯片组'):
+                    chip_wish[1][chip_idx[item_need[0][0:2]]] += item_need[1]
+                elif item_need[0].endswith('双芯片'):
+                    chip_wish[2][chip_idx[item_need[0][0:2]]] += item_need[1]
+                elif len(item_need[0]) == 4 and item_need[0].endswith('芯片'):
+                    chip_wish[0][chip_idx[item_need[0][0:2]]] += item_need[1]
+            else:
+                if item_need[0] == '芯片组':
+                    for i in range(8):
+                        chip_wish[1][i] += item_need[1]
+                elif item_need[0] == '双芯片':
+                    for i in range(8):
+                        chip_wish[2][i] += item_need[1]
+                elif item_need[0] == '芯片':
+                    for i in range(8):
+                        chip_wish[0][i] += item_need[1]
             # if len(item_need[0]) == 5 and item_need[0].endswith('芯片组') and \
             #         item_need[0][0:2] in {"先锋", "近卫", "重装", "狙击", "术师", "医疗", "辅助", "特种"}:
             #     count = max(0, (item_need[1] - owned.get(item_need[0], 0)) * 2)
@@ -258,6 +268,12 @@ def create_plan_by_non_material(wish_list, my_inventory=None):
             #              'cost': 18}
             #         )
             #         sanity += count * 18
+        elif item_need[0] in {'采购凭证', '红票'}:  # 净红票数量，不包括合成双芯片所需
+            if '净' not in item_need[0]:
+                red_ticket_level_wish = max(red_ticket_level_wish, item_need[1])
+            else:
+                red_ticket_usage += item_need[1]
+
 
     # 龙门币/净龙门币逻辑
     lmb_stage_count = max(0, ceil(lmb_need / 10000))
@@ -277,12 +293,16 @@ def create_plan_by_non_material(wish_list, my_inventory=None):
     chip_need = copy.deepcopy(chip_wish)
     for i in range(2, -1, -1):
         for j in range(8):
-            chip_need[i][j] = chip_wish[i][j] - chip_owned[i][j]
+            chip_need[i][j] = chip_wish[i][j] - chip_owned[i][j]  # 去除已有，计算还需要的芯片数
     for i in range(8):
-        if chip_need[1][i] < 0 and chip_need[2][i] > 0:
+        if chip_need[1][i] < 0 and chip_need[2][i] > 0:  # 有多余的大芯片，且缺少双芯片
             compose_num = min(chip_need[2][i], (-chip_need[1][i]) // 2)
             chip_need[1][i] += compose_num * 2
-            chip_need[2][i] -= compose_num
+            chip_need[2][i] -= compose_num  # 大芯片合成双芯片的个数
+            glue_remain -= compose_num
+            if glue_remain < 0:
+                red_ticket_usage += -glue_remain * 90
+                glue_remain = 0
     # 芯片关卡规划逻辑
     for i in range(4):
         count = max(0, chip_need[0][i * 2], chip_need[0][i * 2 + 1]) * 2
@@ -303,6 +323,13 @@ def create_plan_by_non_material(wish_list, my_inventory=None):
                  'cost': 36}
             )
             sanity += count * 36
+    # 红票逻辑
+    red_ticket_level_wish = max(red_ticket_usage - owned.get('采购凭证', 0), red_ticket_level_wish)
+    red_ticket_need = max(0, red_ticket_level_wish - owned.get('红票', 0))
+    red_stage_count = max(0, ceil(red_ticket_need / 20))
+    if red_stage_count != 0:
+        stage_task_list.append({'stage': 'AP-5', 'count': red_stage_count, 'cost': 30})
+        sanity += red_stage_count * 30
 
     # 技能书逻辑
     book_stage_count = ceil(max(book_need[0] / 1.5, book_need[1] / 1.5, book_need[2] / 2))
@@ -312,6 +339,8 @@ def create_plan_by_non_material(wish_list, my_inventory=None):
              'count': book_stage_count,
              'cost': 30}
         )
+
+    stage_task_list.sort(key=lambda x: x['cost'] * x['count'], reverse=True)
 
     return stage_task_list, sanity
 
@@ -723,7 +752,7 @@ def run_plan(reserve_sanity=0):
 
     priority_id = 1
 
-    mp.update()
+    # mp.update()
 
     while has_remain_sanity:
         plan = load_local_plan()

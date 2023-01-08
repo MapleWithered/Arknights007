@@ -399,7 +399,7 @@ def change_people_scene_detect_number_already() -> list[bool]:
     return list_exist
 
 
-def dormitory_change_people(upper_emotion=24, new_people_emotion_lower_or_equal_than=12):
+def dormitory_change_people(upper_emotion=24, new_people_emotion_lower_or_equal_than=2):
     all_people_happy = False
     for i in range(1, 5):
         assert check_and_unpress_blue_button(), RuntimeError("无法回到基建首页")
@@ -427,8 +427,9 @@ def dormitory_change_people(upper_emotion=24, new_people_emotion_lower_or_equal_
         ADB.input_swipe_pos(
             imgops.from_std_pos(ADB.get_resolution(), Pos(*res_nav.get_pos('/ship/dormitory/right_swipe_1'))),
             imgops.from_std_pos(ADB.get_resolution(), Pos(*res_nav.get_pos('/ship/dormitory/right_swipe_2'))),
-            200)
-        img_gray = ADB.screencap_mat(std_size=True, gray=True)
+            200, 0)
+        time.sleep(1)
+        img_gray = ADB.screencap_mat(std_size=True, gray=True, force=True)
         result = template.match_template_all(img_gray, img_template, None, cv2.TM_CCOEFF_NORMED, 0.95,
                                              show_result=False)
         for single_res in result:
@@ -448,8 +449,9 @@ def dormitory_change_people(upper_emotion=24, new_people_emotion_lower_or_equal_
             ADB.input_swipe_pos(
                 imgops.from_std_pos(ADB.get_resolution(), Pos(*res_nav.get_pos('/ship/dormitory/right_swipe_2'))),
                 imgops.from_std_pos(ADB.get_resolution(), Pos(*res_nav.get_pos('/ship/dormitory/right_swipe_1'))),
-                200)
-            img_gray = ADB.screencap_mat(std_size=True, gray=True)
+                200, 0)
+            time.sleep(1)
+            img_gray = ADB.screencap_mat(std_size=True, gray=True, force=True)
             result = template.match_template_best(img_gray, img_template, method=cv2.TM_CCOEFF_NORMED)
         if result.val >= 0.9:  # 有空位
             ADB.input_press_rect(imgops.from_std_rect(ADB.get_resolution(), result.rect))
@@ -496,7 +498,7 @@ def dormitory_fill_people():
     ocr_rect_size = res_nav.get_pos("/ship/summary_scene/plus/ocr_rect_two_char_size")
     swipe_counter = 0
     while swipe_counter <= 7:
-        img = ADB.screencap_mat(std_size=True, gray=False)
+        img = ADB.screencap_mat(std_size=True, gray=False, force=True)
         img_template = res_img.get_img_bgr("/ship/summary_scene/plus.png")
         tm_result = template.match_template_all(img, img_template, None, cv2.TM_CCOEFF_NORMED, 0.7, show_result=False,
                                                 group_rectangle=1)
@@ -516,8 +518,7 @@ def dormitory_fill_people():
             ADB.input_swipe_pos(
                 imgops.from_std_pos(ADB.get_resolution(), Pos(*res_nav.get_pos('/ship/summary_scene/right_swipe_1'))),
                 imgops.from_std_pos(ADB.get_resolution(), Pos(*res_nav.get_pos('/ship/summary_scene/right_swipe_2'))),
-                500)
-            time.sleep(3)
+                300, 500)
             swipe_counter += 1
             continue
         ADB.input_press_rect(imgops.from_std_rect(ADB.get_resolution(), task_plus_rect))
@@ -560,7 +561,7 @@ def put_up_new_people():
     ocr_rect_size = res_nav.get_pos("/ship/summary_scene/plus/ocr_rect_two_char_size")
     swipe_counter = 0
     while swipe_counter <= 7:
-        img = ADB.screencap_mat(std_size=True, gray=False)
+        img = ADB.screencap_mat(std_size=True, gray=False, force=True)
         img_template = res_img.get_img_bgr("/ship/summary_scene/plus.png")
         tm_result = template.match_template_all(img, img_template, None, cv2.TM_CCOEFF_NORMED, 0.7, show_result=False,
                                                 group_rectangle=1)
@@ -581,8 +582,7 @@ def put_up_new_people():
             ADB.input_swipe_pos(
                 imgops.from_std_pos(ADB.get_resolution(), Pos(*res_nav.get_pos('/ship/summary_scene/right_swipe_1'))),
                 imgops.from_std_pos(ADB.get_resolution(), Pos(*res_nav.get_pos('/ship/summary_scene/right_swipe_2'))),
-                500)
-            time.sleep(3)
+                300, 500)
             swipe_counter += 1
             continue
         if task == 'man':  # 制造站 要知道分类

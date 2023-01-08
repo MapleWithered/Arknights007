@@ -105,7 +105,7 @@ class ADB:
             return cls._prev_screenshot_raw
 
     @classmethod
-    def screencap_mat(cls, force: bool = False, std_size: bool = False, gray=False) -> np.array:
+    def screencap_mat(cls, force: bool = True, std_size: bool = False, gray=False) -> np.array:
         if cls._device is None:
             cls.connect()
         img_np = np.frombuffer(cls.screencap_raw(force), dtype=np.uint8)
@@ -146,13 +146,37 @@ class ADB:
     def input_tap(cls, x, y):
         if cls._device is None:
             cls.connect()
-        return cls._device.input_tap(x, y)
+        cls._device.shell("sendevent /dev/input/event5 3 57 1")
+        cls._device.shell("sendevent /dev/input/event5 1 330 1")
+        cls._device.shell("sendevent /dev/input/event5 3 53 " + str(x))
+        cls._device.shell("sendevent /dev/input/event5 3 54 " + str(y))
+        cls._device.shell("sendevent /dev/input/event5 0 0 0")
+        cls._device.shell("sendevent /dev/input/event5 3 57 4294967295")
+        cls._device.shell("sendevent /dev/input/event5 1 330 0")
+        cls._device.shell("sendevent /dev/input/event5 0 0 0")
 
     @classmethod
-    def input_swipe(cls, start_x, start_y, end_x, end_y, duration_ms):
+    def input_swipe(cls, start_x, start_y, end_x, end_y, duration_ms, hold_time_ms=100):
         if cls._device is None:
             cls.connect()
-        return cls._device.input_swipe(start_x, start_y, end_x, end_y, duration_ms)
+        # get ms time
+        cls._device.shell("sendevent /dev/input/event5 3 57 1")
+        cls._device.shell("sendevent /dev/input/event5 1 330 1")
+        time_start = int(round(time.time() * 1000))
+        while time.time() * 1000 - time_start < duration_ms:
+            cls._device.shell("sendevent /dev/input/event5 3 53 " + str(int(start_x + (end_x - start_x) * (
+                    time.time() * 1000 - time_start) / duration_ms)))
+            cls._device.shell("sendevent /dev/input/event5 3 54 " + str(int(start_y + (end_y - start_y) * (
+                    time.time() * 1000 - time_start) / duration_ms)))
+            cls._device.shell("sendevent /dev/input/event5 0 0 0")
+            time.sleep(0.01)
+        cls._device.shell("sendevent /dev/input/event5 3 53 " + str(int(end_x)))
+        cls._device.shell("sendevent /dev/input/event5 3 54 " + str(int(end_y)))
+        cls._device.shell("sendevent /dev/input/event5 0 0 0")
+        time.sleep(hold_time_ms / 1000)
+        cls._device.shell("sendevent /dev/input/event5 3 57 4294967295")
+        cls._device.shell("sendevent /dev/input/event5 1 330 0")
+        cls._device.shell("sendevent /dev/input/event5 0 0 0")
 
     @classmethod
     def input_press_pos(cls, pos: Pos):
@@ -163,8 +187,8 @@ class ADB:
         cls.input_tap(int((rect.x1 + rect.x2) / 2), int((rect.y1 + rect.y2) / 2))
 
     @classmethod
-    def input_swipe_pos(cls, pos1: Pos, pos2: Pos, duration_ms: int):
-        cls.input_swipe(int(pos1.x), int(pos1.y), int(pos2.x), int(pos2.y), duration_ms)
+    def input_swipe_pos(cls, pos1: Pos, pos2: Pos, duration_ms: int, hold_time_ms=100):
+        cls.input_swipe(int(pos1.x), int(pos1.y), int(pos2.x), int(pos2.y), duration_ms, hold_time_ms)
 
     @classmethod
     def input_roll(cls, dx, dy):

@@ -71,6 +71,16 @@ def mat_bgr2gray(mat):
     return cv2.cvtColor(mat, cv2.COLOR_BGR2GRAY)
 
 
+def mat_pick_color_hsv(mat, hsv: Color, tolerance: Color = Color(4, 4, 8)):
+    low_color = np.array([int(hsv.r / 2 - tolerance.r / 2), int(hsv.g * 2.55 - tolerance.g * 2.55),
+                          int(hsv.b * 2.55 - tolerance.b * 2.55)])
+    high_color = np.array([int(hsv.r / 2 + tolerance.r / 2), int(hsv.g * 2.55 + tolerance.g * 2.55),
+                           int(hsv.b * 2.55 + tolerance.b * 2.55)])
+    mask = cv2.inRange(mat, low_color, high_color)
+    res = cv2.bitwise_and(mat, mat, mask=mask)
+    return res
+
+
 def mat_pick_color_rgb(mat, rgb: Color, tolerance=3):
     low_color = np.array([rgb.b - tolerance, rgb.g - tolerance, rgb.r - tolerance])
     high_color = np.array([rgb.b + tolerance, rgb.g + tolerance, rgb.r + tolerance])
@@ -87,6 +97,10 @@ def mat_pick_grey(mat, light: int, tolerance=3):
     return res
 
 
+def mat_threshold(mat, threshold):
+    return cv2.threshold(mat, threshold, 255, cv2.THRESH_BINARY)[1]
+
+
 def uniform_size(mat1, mat2):
     if mat1.size[0] < mat2.size[0]:
         return mat1, cv2.resize(mat2, mat1.size, cv2.INTER_LINEAR)
@@ -100,4 +114,3 @@ def uniform_size(mat1, mat2):
 
 def save_image(mat, filepath):
     cv2.imwrite(filepath, mat)
-

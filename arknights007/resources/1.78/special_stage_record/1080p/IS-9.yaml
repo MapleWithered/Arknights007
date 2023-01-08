@@ -1,0 +1,990 @@
+hw_ratio: '1.78'
+width: 1920
+height: 1080
+mode: event
+event_list:
+- sendevent /dev/input/event5 3 47 1
+- sendevent /dev/input/event5 3 57 1
+- sendevent /dev/input/event5 1 330 1
+- sendevent /dev/input/event5 3 53 624
+- sendevent /dev/input/event5 3 54 855
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 4294967295
+- sendevent /dev/input/event5 1 330 0
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 1
+- sendevent /dev/input/event5 1 330 1
+- sendevent /dev/input/event5 3 53 1696
+- sendevent /dev/input/event5 3 54 736
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 4294967295
+- sendevent /dev/input/event5 1 330 0
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 1
+- sendevent /dev/input/event5 1 330 1
+- sendevent /dev/input/event5 3 53 1823
+- sendevent /dev/input/event5 3 54 578
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 4294967295
+- sendevent /dev/input/event5 1 330 0
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 1
+- sendevent /dev/input/event5 1 330 1
+- sendevent /dev/input/event5 3 53 339
+- sendevent /dev/input/event5 3 54 857
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 855
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 853
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 341
+- sendevent /dev/input/event5 3 54 851
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 849
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 847
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 343
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 845
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 843
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 345
+- sendevent /dev/input/event5 3 54 841
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 839
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 837
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 833
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 831
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 347
+- sendevent /dev/input/event5 3 54 829
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 827
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 823
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 349
+- sendevent /dev/input/event5 3 54 821
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 817
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 815
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 351
+- sendevent /dev/input/event5 3 54 809
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 807
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 803
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 353
+- sendevent /dev/input/event5 3 54 801
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 798
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 355
+- sendevent /dev/input/event5 3 54 794
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 792
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 788
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 786
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 357
+- sendevent /dev/input/event5 3 54 782
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 780
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 359
+- sendevent /dev/input/event5 3 54 776
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 772
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 361
+- sendevent /dev/input/event5 3 54 768
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 766
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 762
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 363
+- sendevent /dev/input/event5 3 54 760
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 756
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 754
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 750
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 365
+- sendevent /dev/input/event5 3 54 746
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 742
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 367
+- sendevent /dev/input/event5 3 54 738
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 369
+- sendevent /dev/input/event5 3 54 728
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 724
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 371
+- sendevent /dev/input/event5 3 54 720
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 717
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 373
+- sendevent /dev/input/event5 3 54 713
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 709
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 705
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 375
+- sendevent /dev/input/event5 3 54 699
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 697
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 377
+- sendevent /dev/input/event5 3 54 691
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 687
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 683
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 379
+- sendevent /dev/input/event5 3 54 679
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 675
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 669
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 381
+- sendevent /dev/input/event5 3 54 665
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 661
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 383
+- sendevent /dev/input/event5 3 54 655
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 651
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 385
+- sendevent /dev/input/event5 3 54 645
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 641
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 638
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 387
+- sendevent /dev/input/event5 3 54 632
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 626
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 620
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 389
+- sendevent /dev/input/event5 3 54 614
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 610
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 391
+- sendevent /dev/input/event5 3 54 604
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 598
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 393
+- sendevent /dev/input/event5 3 54 592
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 588
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 395
+- sendevent /dev/input/event5 3 54 582
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 576
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 572
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 397
+- sendevent /dev/input/event5 3 54 566
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 560
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 399
+- sendevent /dev/input/event5 3 54 555
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 549
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 400
+- sendevent /dev/input/event5 3 54 543
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 537
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 531
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 527
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 402
+- sendevent /dev/input/event5 3 54 521
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 515
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 404
+- sendevent /dev/input/event5 3 54 509
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 501
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 4294967295
+- sendevent /dev/input/event5 1 330 0
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 1
+- sendevent /dev/input/event5 1 330 1
+- sendevent /dev/input/event5 3 53 323
+- sendevent /dev/input/event5 3 54 758
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 754
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 752
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 750
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 325
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 748
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 746
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 744
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 327
+- sendevent /dev/input/event5 3 54 742
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 740
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 736
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 734
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 329
+- sendevent /dev/input/event5 3 54 732
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 730
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 728
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 726
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 331
+- sendevent /dev/input/event5 3 54 724
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 722
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 720
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 719
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 333
+- sendevent /dev/input/event5 3 54 717
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 713
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 711
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 335
+- sendevent /dev/input/event5 3 54 707
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 705
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 703
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 701
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 337
+- sendevent /dev/input/event5 3 54 699
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 697
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 695
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 693
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 339
+- sendevent /dev/input/event5 3 54 691
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 689
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 685
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 341
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 681
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 679
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 677
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 343
+- sendevent /dev/input/event5 3 54 673
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 671
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 669
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 345
+- sendevent /dev/input/event5 3 54 665
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 663
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 661
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 347
+- sendevent /dev/input/event5 3 54 657
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 655
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 349
+- sendevent /dev/input/event5 3 54 651
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 649
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 351
+- sendevent /dev/input/event5 3 54 645
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 641
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 640
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 636
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 353
+- sendevent /dev/input/event5 3 54 632
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 628
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 355
+- sendevent /dev/input/event5 3 54 626
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 622
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 357
+- sendevent /dev/input/event5 3 54 618
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 614
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 610
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 606
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 359
+- sendevent /dev/input/event5 3 54 602
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 361
+- sendevent /dev/input/event5 3 54 598
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 592
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 588
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 363
+- sendevent /dev/input/event5 3 54 584
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 578
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 365
+- sendevent /dev/input/event5 3 54 574
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 568
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 367
+- sendevent /dev/input/event5 3 54 564
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 559
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 369
+- sendevent /dev/input/event5 3 54 553
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 549
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 371
+- sendevent /dev/input/event5 3 54 543
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 537
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 373
+- sendevent /dev/input/event5 3 54 531
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 525
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 375
+- sendevent /dev/input/event5 3 54 517
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 511
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 377
+- sendevent /dev/input/event5 3 54 505
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 499
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 379
+- sendevent /dev/input/event5 3 54 491
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 485
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 381
+- sendevent /dev/input/event5 3 54 480
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 474
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 472
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 383
+- sendevent /dev/input/event5 3 54 466
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 458
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 385
+- sendevent /dev/input/event5 3 54 452
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 446
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 387
+- sendevent /dev/input/event5 3 54 440
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 432
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 389
+- sendevent /dev/input/event5 3 54 426
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 418
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 412
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 391
+- sendevent /dev/input/event5 3 54 406
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 400
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 53 393
+- sendevent /dev/input/event5 3 54 395
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 54 383
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 4294967295
+- sendevent /dev/input/event5 1 330 0
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 1
+- sendevent /dev/input/event5 1 330 1
+- sendevent /dev/input/event5 3 53 280
+- sendevent /dev/input/event5 3 54 720
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 4294967295
+- sendevent /dev/input/event5 1 330 0
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 1
+- sendevent /dev/input/event5 1 330 1
+- sendevent /dev/input/event5 3 53 1708
+- sendevent /dev/input/event5 3 54 1003
+- sendevent /dev/input/event5 0 0 0
+- sendevent /dev/input/event5 3 57 4294967295
+- sendevent /dev/input/event5 1 330 0
+- sendevent /dev/input/event5 0 0 0
+timestamp_list:
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.09602093696594238
+- 0.09602093696594238
+- 0.09602093696594238
+- 3.6202290058135986
+- 3.6202290058135986
+- 3.6202290058135986
+- 3.6202290058135986
+- 3.6202290058135986
+- 3.7270007133483887
+- 3.7270007133483887
+- 3.7270007133483887
+- 6.487179756164551
+- 6.487179756164551
+- 6.487179756164551
+- 6.487179756164551
+- 6.487179756164551
+- 6.551634788513184
+- 6.551634788513184
+- 6.551634788513184
+- 8.472042083740234
+- 8.472042083740234
+- 8.472042083740234
+- 8.472042083740234
+- 8.472042083740234
+- 8.514542579650879
+- 8.514542579650879
+- 8.525285482406616
+- 8.525285482406616
+- 8.525285482406616
+- 8.525285482406616
+- 8.525285482406616
+- 8.525285482406616
+- 8.525285482406616
+- 8.525285482406616
+- 8.525285482406616
+- 8.536027431488037
+- 8.536027431488037
+- 8.536027431488037
+- 8.536027431488037
+- 8.536027431488037
+- 8.536027431488037
+- 8.536027431488037
+- 8.536027431488037
+- 8.536027431488037
+- 8.537004232406616
+- 8.537004232406616
+- 8.537004232406616
+- 8.537004232406616
+- 8.537004232406616
+- 8.537004232406616
+- 8.537004232406616
+- 8.537004232406616
+- 8.537004232406616
+- 8.537004232406616
+- 8.537004232406616
+- 8.537981271743774
+- 8.537981271743774
+- 8.548723220825195
+- 8.548723220825195
+- 8.548723220825195
+- 8.548723220825195
+- 8.548723220825195
+- 8.548723220825195
+- 8.548723220825195
+- 8.548723220825195
+- 8.548723220825195
+- 8.548723220825195
+- 8.549700021743774
+- 8.549700021743774
+- 8.549700021743774
+- 8.549700021743774
+- 8.549700021743774
+- 8.549700021743774
+- 8.549700021743774
+- 8.549700021743774
+- 8.549700021743774
+- 8.549700021743774
+- 8.549700021743774
+- 8.550676345825195
+- 8.550676345825195
+- 8.550676345825195
+- 8.550676345825195
+- 8.550676345825195
+- 8.550676345825195
+- 8.550676345825195
+- 8.550676345825195
+- 8.550676345825195
+- 8.550676345825195
+- 8.550676345825195
+- 8.551653861999512
+- 8.561812400817871
+- 8.561812400817871
+- 8.561812400817871
+- 8.561812400817871
+- 8.561812400817871
+- 8.561812400817871
+- 8.561812400817871
+- 8.561812400817871
+- 8.561812400817871
+- 8.561812400817871
+- 8.56278944015503
+- 8.56278944015503
+- 8.56278944015503
+- 8.56278944015503
+- 8.56278944015503
+- 8.56278944015503
+- 8.56278944015503
+- 8.56278944015503
+- 8.56278944015503
+- 8.56278944015503
+- 8.56278944015503
+- 8.56278944015503
+- 8.563765287399292
+- 8.563765287399292
+- 8.563765287399292
+- 8.563765287399292
+- 8.57450795173645
+- 8.57450795173645
+- 8.57450795173645
+- 8.57450795173645
+- 8.57450795173645
+- 8.57450795173645
+- 8.57450795173645
+- 8.57450795173645
+- 8.57450795173645
+- 8.57450795173645
+- 8.57548475265503
+- 8.57548475265503
+- 8.57548475265503
+- 8.57548475265503
+- 8.57548475265503
+- 8.57548475265503
+- 8.57548475265503
+- 8.57548475265503
+- 8.57548475265503
+- 8.57548475265503
+- 8.57548475265503
+- 8.576463222503662
+- 8.576463222503662
+- 8.576463222503662
+- 8.576463222503662
+- 8.576463222503662
+- 8.576463222503662
+- 8.576463222503662
+- 8.576463222503662
+- 8.576463222503662
+- 8.587204694747925
+- 8.587204694747925
+- 8.587204694747925
+- 8.587204694747925
+- 8.587204694747925
+- 8.587204694747925
+- 8.587204694747925
+- 8.587204694747925
+- 8.587204694747925
+- 8.587204694747925
+- 8.588182210922241
+- 8.588182210922241
+- 8.588182210922241
+- 8.588182210922241
+- 8.588182210922241
+- 8.588182210922241
+- 8.588182210922241
+- 8.588182210922241
+- 8.588182210922241
+- 8.588182210922241
+- 8.588182210922241
+- 8.589156866073608
+- 8.589156866073608
+- 8.589156866073608
+- 8.589156866073608
+- 8.589156866073608
+- 8.589156866073608
+- 8.589156866073608
+- 8.589156866073608
+- 8.589156866073608
+- 8.589156866073608
+- 8.590133666992188
+- 8.590133666992188
+- 8.600878477096558
+- 8.600878477096558
+- 8.600878477096558
+- 8.600878477096558
+- 8.600878477096558
+- 8.600878477096558
+- 8.600878477096558
+- 8.601853609085083
+- 8.601853609085083
+- 8.601853609085083
+- 8.601853609085083
+- 8.601853609085083
+- 8.601853609085083
+- 8.601853609085083
+- 8.601853609085083
+- 8.601853609085083
+- 8.601853609085083
+- 8.602830171585083
+- 8.602830171585083
+- 8.602830171585083
+- 8.602830171585083
+- 8.602830171585083
+- 8.613571643829346
+- 8.613571643829346
+- 8.613571643829346
+- 8.613571643829346
+- 8.613571643829346
+- 8.613571643829346
+- 8.613571643829346
+- 8.613571643829346
+- 8.613571643829346
+- 8.613571643829346
+- 8.614547967910767
+- 8.614547967910767
+- 8.614547967910767
+- 8.614547967910767
+- 8.614547967910767
+- 8.614547967910767
+- 8.614547967910767
+- 8.614547967910767
+- 8.614547967910767
+- 8.614547967910767
+- 8.614547967910767
+- 8.615524530410767
+- 8.615524530410767
+- 8.615524530410767
+- 8.615524530410767
+- 8.615524530410767
+- 8.615524530410767
+- 8.615524530410767
+- 8.615524530410767
+- 8.615524530410767
+- 8.615524530410767
+- 8.615524530410767
+- 8.616501808166504
+- 8.616501808166504
+- 11.179587841033936
+- 11.179587841033936
+- 11.179587841033936
+- 11.179587841033936
+- 11.179587841033936
+- 11.179587841033936
+- 11.179587841033936
+- 11.179587841033936
+- 11.179587841033936
+- 11.179587841033936
+- 11.180564165115356
+- 11.180564165115356
+- 11.180564165115356
+- 11.180564165115356
+- 11.180564165115356
+- 11.180564165115356
+- 11.180564165115356
+- 11.180564165115356
+- 11.180564165115356
+- 11.191307306289673
+- 11.191307306289673
+- 11.191307306289673
+- 11.191307306289673
+- 11.191307306289673
+- 11.191307306289673
+- 11.191307306289673
+- 11.191307306289673
+- 11.191307306289673
+- 11.191307306289673
+- 11.192282915115356
+- 11.192282915115356
+- 11.192282915115356
+- 11.192282915115356
+- 11.192282915115356
+- 11.192282915115356
+- 11.192282915115356
+- 11.192282915115356
+- 11.203026533126831
+- 11.203026533126831
+- 11.203026533126831
+- 11.203026533126831
+- 11.203026533126831
+- 11.203026533126831
+- 11.203026533126831
+- 11.203026533126831
+- 11.204002857208252
+- 11.204002857208252
+- 11.204002857208252
+- 11.204002857208252
+- 11.204002857208252
+- 11.204002857208252
+- 11.20497989654541
+- 11.20497989654541
+- 11.20497989654541
+- 11.20497989654541
+- 11.20497989654541
+- 11.20497989654541
+- 11.20497989654541
+- 11.205955505371094
+- 11.205955505371094
+- 11.205955505371094
+- 11.205955505371094
+- 11.205955505371094
+- 11.205955505371094
+- 11.205955505371094
+- 11.20693302154541
+- 11.20693302154541
+- 11.20693302154541
+- 11.20693302154541
+- 11.20693302154541
+- 11.20693302154541
+- 11.21767520904541
+- 11.21767520904541
+- 11.21767520904541
+- 11.21767520904541
+- 11.21767520904541
+- 11.21767520904541
+- 11.218651533126831
+- 11.218651533126831
+- 11.218651533126831
+- 11.218651533126831
+- 11.218651533126831
+- 11.218651533126831
+- 11.218651533126831
+- 11.218651533126831
+- 11.218651533126831
+- 11.218651533126831
+- 11.219628095626831
+- 11.219628095626831
+- 11.219628095626831
+- 11.219628095626831
+- 11.219628095626831
+- 11.219628095626831
+- 11.219628095626831
+- 11.219628095626831
+- 11.219628095626831
+- 11.219628095626831
+- 11.219628095626831
+- 11.22060489654541
+- 11.22060489654541
+- 11.231347799301147
+- 11.231347799301147
+- 11.231347799301147
+- 11.231347799301147
+- 11.231347799301147
+- 11.231347799301147
+- 11.231347799301147
+- 11.231347799301147
+- 11.231347799301147
+- 11.231347799301147
+- 11.232324123382568
+- 11.232324123382568
+- 11.232324123382568
+- 11.232324123382568
+- 11.232324123382568
+- 11.232324123382568
+- 11.232324123382568
+- 11.232324123382568
+- 11.232324123382568
+- 11.232324123382568
+- 11.232324123382568
+- 11.233299732208252
+- 11.233299732208252
+- 11.233299732208252
+- 11.233299732208252
+- 11.233299732208252
+- 11.233299732208252
+- 11.233299732208252
+- 11.233299732208252
+- 11.233299732208252
+- 11.233299732208252
+- 11.23427677154541
+- 11.23427677154541
+- 11.23427677154541
+- 11.245019674301147
+- 11.245019674301147
+- 11.245019674301147
+- 11.245019674301147
+- 11.245019674301147
+- 11.245019674301147
+- 11.245019674301147
+- 11.245019674301147
+- 11.245019674301147
+- 11.245996236801147
+- 11.245996236801147
+- 11.245996236801147
+- 11.245996236801147
+- 11.245996236801147
+- 11.245996236801147
+- 11.245996236801147
+- 11.245996236801147
+- 11.245996236801147
+- 11.245996236801147
+- 11.246972799301147
+- 11.246972799301147
+- 11.246972799301147
+- 11.246972799301147
+- 11.246972799301147
+- 11.246972799301147
+- 11.246972799301147
+- 11.246972799301147
+- 11.246972799301147
+- 11.246972799301147
+- 11.246972799301147
+- 11.247949600219727
+- 11.247949600219727
+- 11.247949600219727
+- 11.247949600219727
+- 11.258691787719727
+- 11.258691787719727
+- 11.258691787719727
+- 11.258691787719727
+- 11.258691787719727
+- 11.258691787719727
+- 11.258691787719727
+- 11.258691787719727
+- 11.259669780731201
+- 11.259669780731201
+- 11.259669780731201
+- 11.259669780731201
+- 11.259669780731201
+- 11.259669780731201
+- 11.259669780731201
+- 11.259669780731201
+- 11.259669780731201
+- 11.259669780731201
+- 11.26064682006836
+- 11.26064682006836
+- 11.26064682006836
+- 11.26064682006836
+- 11.26064682006836
+- 11.26064682006836
+- 11.26064682006836
+- 11.26064682006836
+- 11.26064682006836
+- 11.26162338256836
+- 11.26162338256836
+- 11.26162338256836
+- 11.26162338256836
+- 11.26162338256836
+- 11.272364854812622
+- 11.272364854812622
+- 11.272364854812622
+- 11.272364854812622
+- 11.272364854812622
+- 11.272364854812622
+- 11.272364854812622
+- 11.272364854812622
+- 11.272364854812622
+- 11.273341417312622
+- 11.273341417312622
+- 11.273341417312622
+- 11.273341417312622
+- 11.273341417312622
+- 11.273341417312622
+- 11.273341417312622
+- 11.273341417312622
+- 11.273341417312622
+- 11.273341417312622
+- 11.27431869506836
+- 11.27431869506836
+- 11.27431869506836
+- 11.27431869506836
+- 11.27431869506836
+- 11.27431869506836
+- 11.27431869506836
+- 11.27431869506836
+- 11.27431869506836
+- 11.275294542312622
+- 11.275294542312622
+- 11.286036729812622
+- 11.286036729812622
+- 11.286036729812622
+- 11.286036729812622
+- 11.286036729812622
+- 14.861963272094727
+- 14.861963272094727
+- 14.861963272094727
+- 14.861963272094727
+- 14.861963272094727
+- 14.945701122283936
+- 14.945701122283936
+- 14.945701122283936
+- 17.85815668106079
+- 17.85815668106079
+- 17.85815668106079
+- 17.85815668106079
+- 17.85815668106079
+- 17.964096069335938
+- 17.964096069335938
+- 17.964096069335938

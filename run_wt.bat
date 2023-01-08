@@ -14,13 +14,12 @@ cd>nul 2>nul /D %~dp0
 call venv\Scripts\activate.bat
 
 rem 主任务
-python run_plan_996.py
+python arknights007\http_api_server.py
 
-
-rem 结束进程
+@REM rem 结束进程
 :end
-echo [93m[!] 拜拜嘞您[1m
-rem TIMEOUT>nul 2>nul /T 3
+@REM echo [93m[!] 拜拜嘞您[1m
+@REM rem TIMEOUT>nul 2>nul /T 3
 pause
 @exit
 
